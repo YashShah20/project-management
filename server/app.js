@@ -1,11 +1,26 @@
+// env configuration
 require("dotenv").config();
 
 const express = require("express");
-const bodyParser = require("body-parser");
-
 const app = express();
 
+// CORS setup
+const cors = require("cors");
+app.use(cors());
+
+// body parser
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+
+// routes
+const userRouter = require("./routes/user");
+
+app.use("/user", userRouter);
+
+// global error handler
+const errorHandler = require("./utils/errorHandler");
+
+app.use(errorHandler);
 
 const port = process.env.PORT || 3000;
 
