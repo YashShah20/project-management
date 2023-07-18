@@ -1,0 +1,154 @@
+1. User table:
+   - user_id (primary key)
+   - username
+   - password
+   - email
+   - role_id (foreign key referencing the role table)
+   - other relevant user attributes
+
+2. Role table:
+   - role_id (primary key)
+   - role_name
+   - other relevant role attributes
+
+3. Project table:
+   - project_id (primary key)
+   - project_name
+   - description
+   - start_date
+   - end_date
+   - lead_user_id (foreign key referencing the user table)
+   - other relevant project attributes
+
+4. Project_User table:
+   - project_id (foreign key referencing the project table)
+   - user_id (foreign key referencing the user table)
+   - role_id (foreign key referencing the role table)
+   - other relevant project-user attributes
+
+5. Task table:
+   - task_id (primary key)
+   - project_id (foreign key referencing the project table)
+   - task_name
+   - description
+   - start_date
+   - end_date
+   - status
+   - assigned_to_user_id (foreign key referencing the user table)
+   - other relevant task attributes
+
+6. Issue table:
+   - issue_id (primary key)
+   - project_id (foreign key referencing the project table)
+   - issue_key
+   - summary
+   - description
+   - issue_type
+   - priority
+   - status
+   - assignee_user_id (foreign key referencing the user table)
+   - reporter_user_id (foreign key referencing the user table)
+   - other relevant issue attributes
+
+7. Comment table:
+   - comment_id (primary key)
+   - issue_id (foreign key referencing the issue table)
+   - user_id (foreign key referencing the user table)
+   - comment_text
+   - created_at
+   - other relevant comment attributes
+
+8. Attachment table:
+   - attachment_id (primary key)
+   - issue_id (foreign key referencing the issue table)
+   - file_name
+   - file_path
+   - uploaded_by_user_id (foreign key referencing the user table)
+   - created_at
+   - other relevant attachment attributes
+
+9. Team table:
+   - team_id (primary key)
+   - team_name
+   - other relevant team attributes
+
+10. Team_Membership table:
+    - team_id (foreign key referencing the team table)
+    - user_id (foreign key referencing the user table)
+    - other relevant team membership attributes
+
+11. Chat Room table:
+    - room_id (primary key)
+    - room_name
+    - room_type (e.g., personal, group)
+    - other relevant chat room attributes
+
+12. User_Chat_Room table:
+    - user_id (foreign key referencing the user table)
+    - room_id (foreign key referencing the chat room table)
+    - role (e.g., owner, participant)
+    - other relevant user-chat room attributes
+
+13. Message table:
+    - message_id (primary key)
+    - room_id (foreign key referencing the chat room table)
+    - user_id (foreign key referencing the user table)
+    - message_text
+    - created_at
+    - other relevant message attributes
+
+14. Notification table:
+    - notification_id (primary key)
+    - user_id (foreign key referencing the user table)
+    - message
+    - created_at
+    - is_read
+    - other relevant notification attributes
+
+15. Activity Log table:
+    - log_id (primary key)
+    - user_id (foreign key referencing the user table)
+    - action
+    - created_at
+    - other relevant log attributes
+
+16. Time Entry table:
+    - time_entry_id (primary key)
+    - task_id (foreign key referencing the task table)
+    - user_id (foreign key referencing the user table)
+    - start_time
+    - end_time
+    - duration
+    - other relevant time entry attributes
+
+17. Milestone table:
+   - milestone_id (primary key)
+   - project_id (foreign key referencing the project table)
+   - milestone_name
+   - due_date
+   - description
+   - other relevant milestone attributes
+
+18. Task_Dependency table:
+   - dependency_id (primary key)
+   - task_id (foreign key referencing the task table)
+   - dependent_task_id (foreign key referencing the task table)
+   - other relevant task dependency attributes
+
+19. Task_Assignment table:
+   - assignment_id (primary key)
+   - task_id (foreign key referencing the task table)
+   - user_id (foreign key referencing the user table)
+   - assigned_start_date
+   - assigned_end_date
+   - other relevant task assignment attributes
+
+20. Project_Document table:
+   - document_id (primary key)
+   - project_id (foreign key referencing the project table)
+   - document_name
+   - document_path
+   - uploaded_by_user_id (foreign key referencing the user table)
+   - upload_date
+   - other relevant project document attributes
+

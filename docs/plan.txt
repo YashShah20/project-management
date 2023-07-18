@@ -1,0 +1,22 @@
+15 jul learn+req.
+
+
+
+tech
+
+frontend
+ angular
+ material angular
+  
+
+backend
+ node + express
+
+db
+ postgres
+ 
+ 
+https://www.postgresql.org/docs/current/
+https://www.postgresqltutorial.com/
+https://www.youtube.com/watch?v=qw--VYLpxG4
+https://pgexercises.com/
