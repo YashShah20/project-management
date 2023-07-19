@@ -1,1 +1,2 @@
-pg_dump postgres://aolalpow:root@john.db.elephantsql.com/aolalpow | tee data_dump_`date +%F`.sql
+pg_dump postgres://yash:root@localhost/project-management | tee data_dump_`date +%F`.sql
+psql postgres://aolalpow:root@john.db.elephantsql.com/aolalpow < data_dump_`date +%F`.sql
