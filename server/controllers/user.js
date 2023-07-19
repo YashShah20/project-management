@@ -20,8 +20,7 @@ const signin = async (req, res, next) => {
     }
 
     // compare password with the stored hash value of the database
-    const matched = await conext(error);
-    mparePassword(password, user.password);
+    const matched = await comparePassword(password, user.password);
 
     if (!matched) {
       return res.status(403).json(`invalid credentials`);
