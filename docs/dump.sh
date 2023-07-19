@@ -1,0 +1,1 @@
+pg_dump postgres://aolalpow:root@john.db.elephantsql.com/aolalpow | tee data_dump_`date +%F`.sql
