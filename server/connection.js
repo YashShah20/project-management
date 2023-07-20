@@ -8,4 +8,19 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
-module.exports = pool;
+const client = {
+  query: async (text, params) => {
+    const connection = await pool.connect();
+    try {
+      // console.log(text, params);
+      return connection.query(text, params);
+    } catch (error) {
+      console.log(error.message);
+      throw error;
+    } finally {
+      connection.release();
+    }
+  },
+};
+
+module.exports = client;

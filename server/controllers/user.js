@@ -1,4 +1,3 @@
-const { log } = require("console");
 const pool = require("../connection");
 const { signToken } = require("../utils/jwt");
 const { comparePassword, hashPassword } = require("../utils/password");
@@ -10,7 +9,10 @@ const signin = async (req, res, next) => {
 
     // checking user with given email address exists
     const [user] = (
-      await pool.query(`select * from users where email = $1`, [email])
+      await pool.query(
+        `select id,email,first_name,last_name,is_admin,password from users where email = $1`,
+        [email]
+      )
     ).rows;
 
     console.log(user);
@@ -26,33 +28,30 @@ const signin = async (req, res, next) => {
       return res.status(403).json(`invalid credentials`);
     }
 
-    const projectsAsLeader = null;
+    // const projects_as_leader = null;
 
-    if (!user.isAdmin) {
-      let projects = (
-        await pool.query(
-          `select "projectId" from project where "leadUserId"=$1`,
-          [user.userId]
-        )
-      ).rows;
+    // if (!user.is_admin) {
+    //   let projects = (
+    //     await pool.query(
+    //       `select "project_id" from project where "lead_id"=$1`,
+    //       [user.id]
+    //     )
+    //   ).rows;
 
-      projectsAsLeader = projects.reduce((acc, val) => {
-        acc.push(val.projectId);
-        return acc;
-      }, []);
-    }
+    //   projects_as_leader = projects.reduce((acc, val) => {
+    //     acc.push(val.project_id);
+    //     return acc;
+    //   }, []);
+    // }
 
     delete user.password;
-    delete user.createdAt;
-    delete user.createdBy;
-    delete user.lastModifiedAt;
-    delete user.lastModifiedBy;
 
-    payload = {
-      ...user,
-      projectsAsLeader,
-    };
-    const token = signToken(payload);
+    // payload = {
+    //   ...user,
+    //   projects_as_leader,
+    // };
+    // const token = signToken(payload);
+    const token = signToken(user);
 
     res.json({ token });
   } catch (error) {
@@ -62,16 +61,13 @@ const signin = async (req, res, next) => {
 
 const getProfile = async (req, res, next) => {
   try {
-    const { userId } = req.user;
-    console.log(req.user);
+    const { id } = req.user;
     const [user] = (
-      await pool.query(`select * from users where "userId" = $1`, [userId])
+      await pool.query(`select * from users where id = $1`, [id])
     ).rows;
-    console.log(user);
 
     delete user.password;
-    delete user.createdAt;
-    delete user.lastModifiedAt;
+    delete user.password_reset_token;
 
     res.json(user);
   } catch (error) {
@@ -82,15 +78,15 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    const { userId } = req.user;
-    const { firstName, lastName, userName } = req.body;
+    const { id } = req.user;
+    const { first_name, last_name } = req.body;
 
     const [user] = (
       await pool.query(
-        `UPDATE public.users
-          SET  "firstName"=$2, "lastName"=$3, "userName"=$4
-          WHERE "userId"=$1 returning "userId","firstName","lastName","userName","email","isAdmin"`,
-        [userId, firstName, lastName, userName]
+        `UPDATE users
+          SET  first_name=$2, last_name=$3
+          WHERE id=$1 returning id,first_name,last_name,email,is_admin`,
+        [id, first_name, last_name]
       )
     ).rows;
     res.json(user);
@@ -103,12 +99,10 @@ const updatePassword = [
   // validating old password
   async (req, res, next) => {
     try {
-      const { userId } = req.user;
+      const { id } = req.user;
       const { password } = req.body;
       const [user] = (
-        await pool.query(`select password from users where "userId"=$1`, [
-          userId,
-        ])
+        await pool.query(`select password from users where id=$1`, [id])
       ).rows;
 
       const matched = await comparePassword(password, user.password);
@@ -124,19 +118,19 @@ const updatePassword = [
   // updating the password
   async (req, res, next) => {
     try {
-      const { userId } = req.user;
-      const { newPassword } = req.body;
+      const { id } = req.user;
+      const { new_password } = req.body;
 
-      const hashedPassword = await hashPassword(newPassword);
+      const hashed_password = await hashPassword(new_password);
 
-      const updateCount = (
+      const update_count = (
         await pool.query(
-          `update users set "password"=$2 where "userId"=$1 returning "userId"`,
-          [userId, hashedPassword]
+          `update users set password=$2 where id=$1 returning id`,
+          [id, hashed_password]
         )
       ).rowCount;
 
-      res.json({ success: updateCount !== 0 });
+      res.json({ success: update_count !== 0 });
     } catch (error) {
       next(error);
     }
@@ -148,7 +142,7 @@ const forgotPassword = (req, res, next) => {
     const { email } = req.body;
     const token = crypto.randomBytes(64).toString("hex");
 
-    pool.query(`update users set "passwordResetToken"=$2 where "email"=$1`, [
+    pool.query(`update users set password_reset_token=$2 where email=$1`, [
       email,
       token,
     ]);
@@ -169,7 +163,7 @@ const resetPassword = async (req, res, next) => {
     // validating token exists in the database
     const [user] = (
       await pool.query(
-        `select "userId" from users where "passwordResetToken"=$1`,
+        `select id from users where password_reset_token=$1`,
         [token]
       )
     ).rows;
@@ -179,16 +173,16 @@ const resetPassword = async (req, res, next) => {
     }
 
     // updating the password
-    const hashedPassword = await hashPassword(password);
+    const hashed_password = await hashPassword(password);
 
-    const updateCount = (
+    const update_count = (
       await pool.query(
-        `update users set "password"=$2,"passwordResetToken"=null where "userId"=$1 returning "userId"`,
-        [user.userId, hashedPassword]
+        `update users set password=$2,password_reset_token=null where id=$1 returning id`,
+        [user.id, hashed_password]
       )
     ).rowCount;
 
-    res.json({ success: updateCount !== 0 });
+    res.json({ success: update_count !== 0 });
   } catch (error) {
     next(error);
   }
