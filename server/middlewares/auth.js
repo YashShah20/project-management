@@ -19,8 +19,8 @@ const auth = async (req, res, next) => {
 const adminAuth = [
   auth,
   async (req, res, next) => {
-    const isAdmin = req.user.isAdmin;
-    if (isAdmin) {
+    const is_admin = req.user.is_admin;
+    if (is_admin) {
       next();
     }
 
