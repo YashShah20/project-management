@@ -1,4 +1,7 @@
 const pool = require("../connection");
+const LEAD_USER_ROLE_ID = 1;
+const DEFAULT_ROLE_ID = 1;
+const DEFAULT_PROFILE_ID = 1;
 
 const getProjects = async (req, res, next) => {
   try {
@@ -57,11 +60,39 @@ const getProjectById = async (req, res, next) => {
   }
 };
 
+const getProjectTitles = async (req, res, next) => {
+  try {
+    const project_titles = (await pool.query(`select id,title from projects`))
+      .rows;
+
+    res.json(project_titles);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTasksByProjectId = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { project_id } = req.params;
+    const { page, per_page } = req.query;
+
+    const tasks = (
+      await pool.query(
+        `select * from tasks where project_id = $1 and $2 in (select user_id from project_users where project_id = $1) offset $3 limit $4;`,
+        [project_id, id, (page - 1) * per_page || 0, per_page || 5]
+      )
+    ).rows;
+
+    res.send(tasks);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const addProject = async (req, res, next) => {
   try {
     const { title, description, start_date, end_date, lead_id } = req.body;
-    const DEFAULT_ROLE_ID = 1;
-    const DEFAULT_PROFILE_ID = 1;
 
     const [project] = (
       await pool.query(
@@ -91,7 +122,6 @@ const updateProject = async (req, res, next) => {
     const { project_id } = req.params;
     const { id } = req.user;
 
-    const LEAD_USER_ROLE_ID = 1;
     const [project] = (
       await pool.query(
         `UPDATE projects
@@ -116,15 +146,39 @@ const updateProject = async (req, res, next) => {
 
 const updateProjectStatus = async (req, res, next) => {
   try {
-    res.json("router working!!");
+    const { id } = req.user;
+    const { project_id } = req.params;
+    const { status } = req.body;
+
+    const LEAD_USER_ROLE_ID = 1;
+    const [project] = (
+      await pool.query(
+        `UPDATE projects
+          SET status=$4
+          WHERE id=$1 and (select role_id from project_users where project_id=projects.id and user_id=$2)=$3 returning *;`,
+        [project_id, id, LEAD_USER_ROLE_ID, status]
+      )
+    ).rows;
+
+    res.json(project);
   } catch (error) {
     next(error);
   }
 };
 
+const getProjectLead = async (project_id) => {
+  return pool.query(
+    "select user_id from project_users where project_id=$1 and role_id = $2",
+    [project_id, LEAD_USER_ROLE_ID]
+  );
+};
+
 module.exports = {
   getProjects,
   getProjectById,
+  getProjectTitles,
+  getTasksByProjectId,
+  getProjectLead,
   addProject,
   updateProject,
   updateProjectStatus,
