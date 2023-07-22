@@ -53,7 +53,7 @@ const signin = async (req, res, next) => {
     // const token = signToken(payload);
     const token = signToken(user);
 
-    res.json({ token });
+    res.json({ token,user });
   } catch (error) {
     next(error);
   }
@@ -62,9 +62,8 @@ const signin = async (req, res, next) => {
 const getProfile = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const [user] = (
-      await pool.query(`select * from users where id = $1`, [id])
-    ).rows;
+    const [user] = (await pool.query(`select * from users where id = $1`, [id]))
+      .rows;
 
     delete user.password;
     delete user.password_reset_token;
@@ -162,10 +161,9 @@ const resetPassword = async (req, res, next) => {
 
     // validating token exists in the database
     const [user] = (
-      await pool.query(
-        `select id from users where password_reset_token=$1`,
-        [token]
-      )
+      await pool.query(`select id from users where password_reset_token=$1`, [
+        token,
+      ])
     ).rows;
 
     if (!user) {
