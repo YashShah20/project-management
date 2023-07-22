@@ -15,9 +15,11 @@ app.use(bodyParser.json());
 // routes
 const userRouter = require("./routes/user");
 const projectRouter = require("./routes/project");
+const taskRouter = require("./routes/task");
 
 app.use("/user", userRouter);
 app.use("/project", projectRouter);
+app.use("/task", taskRouter);
 
 // global error handler
 const errorHandler = require("./utils/errorHandler");
