@@ -1,4 +1,8 @@
 const { verifyToken } = require("../utils/jwt");
+const {
+  getProjectLeadByTaskId,
+  getProjectLeadByProjectId,
+} = require("../utils/project");
 
 const auth = async (req, res, next) => {
   try {
@@ -16,10 +20,37 @@ const auth = async (req, res, next) => {
   }
 };
 
-const adminAuth = [
+const projectLeadAuth = [
   auth,
   async (req, res, next) => {
-    const is_admin = req.user.is_admin;
+    try {
+      const user = req.user;
+      const { project_id, task_id } = req.params;
+
+      let lead;
+      if (project_id) {
+        lead = await getProjectLeadByProjectId(project_id);
+      } else if (task_id) {
+        lead = await getProjectLeadByTaskId(task_id);
+      } else {
+        lead = null;
+      }
+      console.log(lead,user);
+
+      if (lead?.user_id !== user.id) {
+        return res.status(403).send("project lead auth failed...");
+      }
+
+      next();
+    } catch (error) {
+      return res.status(403).send("project lead auth failed...");
+    }
+  },
+];
+const adminAuth = [
+  auth,
+  (req, res, next) => {
+    const { is_admin } = req.user;
     if (is_admin) {
       next();
     }
@@ -31,4 +62,5 @@ const adminAuth = [
 module.exports = {
   auth,
   adminAuth,
+  projectLeadAuth,
 };
