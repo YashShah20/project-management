@@ -1,5 +1,5 @@
 const express = require("express");
-const { auth, projectLeadAuth } = require("../middlewares/auth");
+const { auth, projectLeadAuth, adminAuth } = require("../middlewares/auth");
 const {
   getProjects,
   getProjectById,
@@ -14,9 +14,9 @@ const router = express.Router();
 
 router.get("/", auth, getProjects);
 router.get("/titles", auth, getProjectTitles);
-router.get("/:project_id/tasks", auth, getTasksByProjectId);
+router.get("/:project_id(\\d+)/tasks", auth, getTasksByProjectId);
 router.get("/:project_id(\\d+)", auth, getProjectById);
-router.post("/add", projectLeadAuth, addProject);
+router.post("/add", adminAuth, addProject);
 router.put("/:project_id(\\d+)/update", projectLeadAuth, updateProject);
 router.put(
   "/:project_id(\\d+)/update-status",

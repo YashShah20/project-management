@@ -122,8 +122,8 @@ const updateTask = async (req, res, next) => {
     const [task] = (
       await pool.query(
         `UPDATE tasks
-            SET title=$2, description=$3, due_date=$4, priority_level=$5, status=$6, completion_date=$7
-            WHERE id=$1 returning *;`,
+          SET title=$2, description=$3, due_date=$4, priority_level=$5, status=$6, completion_date=$7
+          WHERE id=$1 returning *;`,
         [
           task_id,
           title,
@@ -168,7 +168,7 @@ const removeTaskDependency = async (req, res, next) => {
   try {
     const { task_id, dependent_task_id } = req.params;
     pool.query(
-      `DELETE FROM public.task_dependencies
+      `DELETE FROM task_dependencies
 	      WHERE task_id=$1 and dependent_task_id=$2`,
       [task_id, dependent_task_id]
     );
@@ -186,8 +186,8 @@ const assignUser = async (req, res, next) => {
     const [task_assignment] = (
       await pool.query(
         `INSERT INTO task_assignments(
-        task_id, user_id, assignment_date)
-        VALUES ($1, $2, $3) returning *`,
+          task_id, user_id, assignment_date)
+          VALUES ($1, $2, $3) returning *`,
         [task_id, user_id, assignment_date]
       )
     ).rows;
