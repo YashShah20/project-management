@@ -53,7 +53,7 @@ const signin = async (req, res, next) => {
     // const token = signToken(payload);
     const token = signToken(user);
 
-    res.json({ token,user });
+    res.json({ token, user });
   } catch (error) {
     next(error);
   }
@@ -186,6 +186,41 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+const getUsers = async (req, res, next) => {
+  try {
+    const users = (
+      await pool.query(
+        `select id,first_name,last_name,email,mobile_number from users where is_admin=false;`
+      )
+    ).rows;
+
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addUser = async (req, res, next) => {
+  try {
+    const { first_name, last_name, email, mobile_number } = req.body;
+    const password = crypto.randomBytes(16).toString("hex");
+    console.log("Password", password);
+    const hashed_password = await hashPassword(password);
+
+    const [user] = (
+      await pool.query(
+        `INSERT INTO users(
+          first_name, last_name, email, mobile_number, password)
+          VALUES ($1, $2, $3, $4, $5) returning *`,
+        [first_name, last_name, email, mobile_number, hashed_password]
+      )
+    ).rows;
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signin,
   getProfile,
@@ -193,4 +228,7 @@ module.exports = {
   updatePassword,
   forgotPassword,
   resetPassword,
+
+  getUsers,
+  addUser,
 };
