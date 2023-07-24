@@ -16,10 +16,16 @@ app.use(bodyParser.json());
 const userRouter = require("./routes/user");
 const projectRouter = require("./routes/project");
 const taskRouter = require("./routes/task");
+const issueRouter = require("./routes/issue");
+const roleRouter = require("./routes/role");
+const userProfileRouter = require("./routes/userProfile");
 
 app.use("/user", userRouter);
 app.use("/project", projectRouter);
 app.use("/task", taskRouter);
+app.use("/issue", issueRouter);
+app.use("/role", roleRouter);
+app.use("/user-profile", userProfileRouter);
 
 // global error handler
 const errorHandler = require("./utils/errorHandler");
