@@ -8,12 +8,14 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { ProjectService } from '../services/project.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private cookieService: CookieService,
-    private userService: UserService
+    private userService: UserService,
+    private projectService: ProjectService
   ) {}
   intercept(
     req: HttpRequest<any>,

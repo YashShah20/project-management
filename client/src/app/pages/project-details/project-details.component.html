@@ -1,0 +1,35 @@
+<!-- <div class="content">
+    <h2>Project Details</h2>
+    <div class="body">
+        {{projectDetails | json}}
+    </div>
+    <div class="container">
+        <button class="btn btn-outline-secondary btn-sm" (click)="onClickUpdate()">Update</button>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="project-info-box mt-0">
+                <a class="btn btn-sm btn-dark my-3" routerLink="/user/user-projects">Back</a>
+                <h3>PROJECT DETAILS</h3>
+                <!-- <p class="mb-0">Vivamus pellentesque, felis in aliquam ullamcorper, lorem tortor porttitor erat, hendrerit porta nunc tellus eu lectus. Ut vel imperdiet est. Pellentesque condimentum, dui et blandit laoreet, quam nisi tincidunt tortor.</p> -->
+            </div><!-- / project-info-box -->
+
+            <div class="project-info-box">
+                <p><b>Title:</b> {{projectDetails?.title}}</p>
+                <p><b>Description:</b> {{projectDetails?.description}}</p>
+                <p><b>Start Date:</b> {{projectDetails?.start_date | date}}</p>
+                <p><b>Status:</b> {{projectDetails?.status | status}}</p>
+                <p><b>Developers:</b> {{projectDevlopers}}</p>
+                <p class="mb-0"><b>Project Lead:</b> {{projectLead}} <button class="mx-2 btn btn-outline-secondary btn-sm" (click)="onClickUpdate()">Update</button></p>
+            </div><!-- / project-info-box -->
+
+        </div><!-- / column -->
+
+        
+    </div>
+</div>
+
+

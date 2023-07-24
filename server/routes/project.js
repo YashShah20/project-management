@@ -11,6 +11,7 @@ const {
 } = require("../controllers/project");
 const router = express.Router();
 
+// http://localhost:3000/project/
 router.get("/", auth, getProjects);
 router.get("/titles", auth, getProjectTitles);
 router.get("/:project_id/tasks", auth, getTasksByProjectId);

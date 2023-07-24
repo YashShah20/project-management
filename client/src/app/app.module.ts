@@ -14,9 +14,15 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 import { UserService } from './services/user.service';
 import { ComponentsModule } from "./components/components.module";
+import { UserUpdateProfileComponent } from './pages/user-update-profile/user-update-profile.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { MaterialModule } from 'src/material.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { StatusPipe } from './pipes/status.pipe';
 
 @NgModule({
-    declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, UserLayoutComponent],
+    declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent, UserLayoutComponent, UserUpdateProfileComponent],
     providers: [
         UserService,
         CookieService,
@@ -27,6 +33,16 @@ import { ComponentsModule } from "./components/components.module";
         },
     ],
     bootstrap: [AppComponent],
-    imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, ComponentsModule]
+    imports: [
+        MatSlideToggleModule,
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        ComponentsModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        MaterialModule
+    ]
 })
 export class AppModule {}

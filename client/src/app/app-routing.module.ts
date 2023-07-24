@@ -11,12 +11,12 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'admin-dashboard', pathMatch: 'full', canActivate: [adminAuthGuard] },
-  // { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [userAuthGuard] },
+  // { path: '', redirectTo: 'admin/dashboard', pathMatch: 'full', canActivateChild: [adminAuthGuard] },
+  // { path: '', redirectTo: 'user/dashboard', pathMatch: 'full', canActivateChild: [adminAuthGuard] },
   { path: 'admin', component: AdminLayoutComponent, canActivate: [adminAuthGuard], children: [
     { path: '', loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule) }
   ]},
-  { path: 'user', component: UserLayoutComponent, canActivate: [userAuthGuard], children: [
+  { path: 'user', component: UserLayoutComponent, canActivate: [adminAuthGuard], children: [
     { path: '', loadChildren: () => import('./layouts/user-layout/user-layout.module').then(x => x.UserLayoutModule) }
   ]},
   { path: '', component: AuthLayoutComponent, children: [

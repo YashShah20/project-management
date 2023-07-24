@@ -1,1 +1,18 @@
-<p>navbar works!</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" routerLink="user-dashboard">Project Management</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav" *ngFor="let item of menuItems" routerLinkActive="active">
+        <a class="nav-item nav-link" [routerLink]="[item.path]">{{item.title}}</a>
+      </div>
+    </div>
+    <button href="javascript:void(0)" (click)="logOut()" class=" btn btn-sm d-none d-sm-flex align-items-center"
+        style="background-color: white;">
+        <span class="material-icons ">logout</span>&nbsp;
+        <span>Logout</span>
+      </button>
+    
+</nav>
+
