@@ -1,5 +1,6 @@
 const pool = require("../connection");
 const { signToken } = require("../utils/jwt");
+const { sendMail } = require("../utils/mail");
 const { comparePassword, hashPassword } = require("../utils/password");
 const crypto = require("crypto");
 
@@ -136,18 +137,27 @@ const updatePassword = [
   },
 ];
 
-const forgotPassword = (req, res, next) => {
+const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
     const token = crypto.randomBytes(64).toString("hex");
 
-    pool.query(`update users set password_reset_token=$2 where email=$1`, [
-      email,
-      token,
-    ]);
+    const count = (
+      await pool.query(
+        `update users set password_reset_token=$2 where email=$1`,
+        [email, token]
+      )
+    ).rowCount;
 
-    console.log(token);
-
+    if (count > 0) {
+      const html = `
+        <p>
+          Your one time link to reset your account password is
+          <a href="http://localhost:4200/reset-password?token=${token}">here</a>
+        </p>
+      `;
+      sendMail(email, `Password Reset Request`, { html });
+    }
     res.json({ success: true });
   } catch (error) {
     next(error);
@@ -161,9 +171,10 @@ const resetPassword = async (req, res, next) => {
 
     // validating token exists in the database
     const [user] = (
-      await pool.query(`select id from users where password_reset_token=$1`, [
-        token,
-      ])
+      await pool.query(
+        `select id,email from users where password_reset_token=$1`,
+        [token]
+      )
     ).rows;
 
     if (!user) {
@@ -180,6 +191,15 @@ const resetPassword = async (req, res, next) => {
       )
     ).rowCount;
 
+    const html = `
+      <p>
+        Password reset is successful!!
+      </p>
+    `;
+
+    if (update_count !== 0) {
+      sendMail(user.email, `Password Reset Confirmation`, { html });
+    }
     res.json({ success: update_count !== 0 });
   } catch (error) {
     next(error);
@@ -215,6 +235,15 @@ const addUser = async (req, res, next) => {
         [first_name, last_name, email, mobile_number, hashed_password]
       )
     ).rows;
+    const html = `
+      <h3>Welcome, ${first_name} ${last_name}!!</h3>
+
+      <p>Your account credentials are</p>
+      <b>Email</b>: ${email} <br />
+      <b>Password</b>: ${password}
+    `;
+
+    sendMail(email, `Account Credentials`, { html });
     res.json(user);
   } catch (error) {
     next(error);
