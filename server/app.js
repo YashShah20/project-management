@@ -27,6 +27,21 @@ app.use("/issue", issueRouter);
 app.use("/role", roleRouter);
 app.use("/user-profile", userProfileRouter);
 
+// app.get("/oauth2callback", async (req, res, next) => {
+//   try {
+//     const clientId = process.env.CLIENT_ID;
+//     const clientSecret = process.env.CLIENT_SECRET;
+
+//     const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret);
+//     const authorizationCode = req.query.code;
+//     const token = await oAuth2Client.getToken(authorizationCode);
+
+//     res.json(token);
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
+
 // global error handler
 const errorHandler = require("./utils/errorHandler");
 
