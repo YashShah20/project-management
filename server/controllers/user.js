@@ -208,9 +208,11 @@ const resetPassword = async (req, res, next) => {
 
 const getUsers = async (req, res, next) => {
   try {
+    const { page, per_page } = req.query;
     const users = (
       await pool.query(
-        `select id,first_name,last_name,email,mobile_number from users where is_admin=false;`
+        `select id,first_name,last_name,email,mobile_number from users where is_admin=false order by id offset $1 limit $2;`,
+        [(page - 1) * per_page || 0, per_page || 5]
       )
     ).rows;
 
