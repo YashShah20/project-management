@@ -150,7 +150,6 @@ const updateProjectStatus = async (req, res, next) => {
     const { project_id } = req.params;
     const { status } = req.body;
 
-    const LEAD_USER_ROLE_ID = 1;
     const [project] = (
       await pool.query(
         `UPDATE projects
@@ -166,20 +165,37 @@ const updateProjectStatus = async (req, res, next) => {
   }
 };
 
-const getProjectLead = async (project_id) => {
-  return pool.query(
-    "select user_id from project_users where project_id=$1 and role_id = $2",
-    [project_id, LEAD_USER_ROLE_ID]
-  );
-};
+const addProjectUsers = async (req, res, next) => {
+  try {
+    const { project_id } = req.params;
+    const { users } = req.body;
 
+    const project_users = await Promise.all(
+      users.map(async (user) => {
+        const { user_id, role_id, profile_id, join_date } = user;
+        return pool.query(
+          `INSERT INTO project_users (
+            project_id, user_id, role_id, profile_id, join_date)
+            VALUES ($1, $2, $3, $4, $5) returning *;`,
+          [project_id, user_id, role_id, profile_id, join_date]
+        );
+      })
+    );
+
+    res.json({ users: project_users.map((user) => user.rows).flat() });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getProjects,
   getProjectById,
   getProjectTitles,
   getTasksByProjectId,
-  getProjectLead,
+
   addProject,
   updateProject,
   updateProjectStatus,
+
+  addProjectUsers,
 };

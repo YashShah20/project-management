@@ -122,8 +122,8 @@ const updateTask = async (req, res, next) => {
     const [task] = (
       await pool.query(
         `UPDATE tasks
-            SET title=$2, description=$3, due_date=$4, priority_level=$5, status=$6, completion_date=$7
-            WHERE id=$1 returning *;`,
+          SET title=$2, description=$3, due_date=$4, priority_level=$5, status=$6, completion_date=$7
+          WHERE id=$1 returning *;`,
         [
           task_id,
           title,
@@ -168,11 +168,66 @@ const removeTaskDependency = async (req, res, next) => {
   try {
     const { task_id, dependent_task_id } = req.params;
     pool.query(
-      `DELETE FROM public.task_dependencies
+      `DELETE FROM task_dependencies
 	      WHERE task_id=$1 and dependent_task_id=$2`,
       [task_id, dependent_task_id]
     );
     res.json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const assignUser = async (req, res, next) => {
+  try {
+    const { task_id } = req.params;
+    const { user_id, assignment_date } = req.body;
+
+    const [task_assignment] = (
+      await pool.query(
+        `INSERT INTO task_assignments(
+          task_id, user_id, assignment_date)
+          VALUES ($1, $2, $3) returning *`,
+        [task_id, user_id, assignment_date]
+      )
+    ).rows;
+    res.json(task_assignment);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateAssignment = async (req, res, next) => {
+  try {
+    const { assignment_id } = req.params;
+    const { assignment_date } = req.body;
+
+    const [task_assignment] = (
+      await pool.query(
+        `UPDATE task_assignments
+          SET assignment_date=$2
+          WHERE id=$1 RETURNING *`,
+        [assignment_id, assignment_date]
+      )
+    ).rows;
+    res.json(task_assignment);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteAssignment = async (req, res, next) => {
+  try {
+    const { assignment_id } = req.params;
+
+    const [task_assignment] = (
+      await pool.query(
+        `DELETE FROM task_assignments
+          WHERE id=$1 returning *`,
+        [assignment_id]
+      )
+    ).rows;
+    res.json(task_assignment);
   } catch (error) {
     next(error);
   }
@@ -185,4 +240,7 @@ module.exports = {
   updateTask,
   addTaskDependencies,
   removeTaskDependency,
+  assignUser,
+  updateAssignment,
+  deleteAssignment,
 };
