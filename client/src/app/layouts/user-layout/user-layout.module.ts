@@ -15,6 +15,9 @@ import { MatTableModule } from '@angular/material/table';
 import { StatusPipe } from 'src/app/pipes/status.pipe';
 import { ProjectDetailsComponent } from '../../pages/project-details/project-details.component';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { ProjectDetailsComponent } from '../../pages/project-details/project-det
     MaterialModule,
     MatPaginatorModule,
     // MatTableDataSource,
-    MatTableModule
+    MatTableModule,
+    NgbModule,
+    ReactiveFormsModule
   ], 
   providers: [UserService, ProjectService]
 })

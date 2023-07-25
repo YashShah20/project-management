@@ -13,7 +13,14 @@
         <th scope="col">Action</th>
       </tr>
     </thead>
-    <tbody >
+
+    <div *ngIf="loader" class="spinner-section">
+      <div  class="spinner-border text-secondary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <tbody *ngIf="!loader">
       <tr *ngFor="let project of projectList; let indexOfelement = index">
         <!-- <app-project-details></app-project-details> -->
         <th scope="row">{{ indexOfelement + 1 }}</th>
@@ -21,7 +28,7 @@
         <td>{{ project.start_date | date }}</td>
         <td>{{ project.status}}</td>
         <td>
-          <a class="btn btn-primary btn-sm mx-1"
+          <a class="btn btn-outline-secondary btn-sm mx-1"
             [routerLink]="['/user/project-detail', project.id]">View</a>
         </td>
       </tr>

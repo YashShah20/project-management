@@ -405,3 +405,19 @@ p {
 b, strong {
     font-weight: 700 !important;
 }
+
+.spinner-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-border {
+  width: 100px;
+  height: 100px;
+}

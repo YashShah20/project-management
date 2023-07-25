@@ -16,6 +16,7 @@ export class ProjectListComponent implements OnInit, AfterViewInit {
 
   projectList!: any[];
   dataSource: any
+  loader: boolean = true
 
   constructor(private userService: UserService, private projectService: ProjectService, private toast: ToastrService) {}
   
@@ -28,6 +29,7 @@ export class ProjectListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.projectService.getProjects(1, 10).subscribe((projects) => {
       this.projectList = projects;
+      this.loader = false
       // this.dataSource = new MatTableDataSource<any>(this.projectList);
     })
   }

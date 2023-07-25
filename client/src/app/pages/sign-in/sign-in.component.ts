@@ -14,6 +14,7 @@ export class SignInComponent implements OnInit {
   passType: string = 'password';
   eyeIcon: string = 'fa-eye-slash';
   loginForm!: FormGroup;
+  loader: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -38,6 +39,7 @@ export class SignInComponent implements OnInit {
 
   onLoginFormSubmit() {
     if(this.loginForm.valid) {
+      this.loader = true;
       this.userService
       .signin(this.loginForm.value)
       .subscribe({
@@ -55,10 +57,12 @@ export class SignInComponent implements OnInit {
             this.toast.success(`${res.user.first_name} Logged In`, 'Success')
             this.router.navigate(['user'])
           }
+          this.loader = false
         },
         error: (err) => {
           // alert(err?.error.message)          
           this.toast.error(err?.error, 'Error')
+          this.loader = false
         }
       });
       
