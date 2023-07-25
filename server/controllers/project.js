@@ -118,14 +118,14 @@ const addProject = async (req, res, next) => {
 
 const updateProject = async (req, res, next) => {
   try {
-    const { title, description, start_date, end_date } = req.body;
+    const { title, description, start_date, end_date, status } = req.body;
     const { project_id } = req.params;
     const { id } = req.user;
 
     const [project] = (
       await pool.query(
         `UPDATE projects
-          SET title=$4, description=$5, start_date=$6, end_date=$7
+          SET title=$4, description=$5, start_date=$6, end_date=$7, status=$8
           WHERE id=$1 and (select role_id from project_users where project_id=projects.id and user_id=$2)=$3 returning *;`,
         [
           project_id,
@@ -135,6 +135,7 @@ const updateProject = async (req, res, next) => {
           description,
           start_date,
           end_date,
+          status,
         ]
       )
     ).rows;
