@@ -39,13 +39,30 @@ const getIssueById = async (req, res, next) => {
 const addIssue = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const { title, description, type, severity, status, project_id } = req.body;
+    const {
+      title,
+      description,
+      type,
+      severity,
+      status,
+      assigned_to,
+      project_id,
+    } = req.body;
     const [issue] = (
       await pool.query(
         `INSERT INTO issues(
-        title, description, type, severity, status, reported_by, project_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
-        [title, description, type, severity, status, id, project_id]
+        title, description, type, severity, status, assigned_to, reported_by, project_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`,
+        [
+          title,
+          description,
+          type,
+          severity,
+          status,
+          assigned_to,
+          id,
+          project_id,
+        ]
       )
     ).rows;
     res.json(issue);
@@ -56,14 +73,15 @@ const addIssue = async (req, res, next) => {
 const updateIssue = async (req, res, next) => {
   try {
     const { issue_id } = req.params;
-    const { title, description, type, severity, assigned_to } = req.body;
+    const { title, description, type, severity, status, assigned_to } =
+      req.body;
 
     const [issue] = (
       await pool.query(
         `UPDATE issues
-            SET title=$2, description=$3, type=$4, severity=$5, assigned_to=$6
+            SET title=$2, description=$3, type=$4, severity=$5, status=$6, assigned_to=$7
             WHERE id=$1 RETURNING *;`,
-        [issue_id, title, description, type, severity, assigned_to]
+        [issue_id, title, description, type, severity, status, assigned_to]
       )
     ).rows;
 

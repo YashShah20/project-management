@@ -7,16 +7,27 @@ const {
   updateIssue,
   updateIssueStatus,
 } = require("../controllers/issue");
+const { paginationValidator } = require("../validators/pagination");
+const {
+  issueSchemaValidator,
+  issueStatusValidator,
+} = require("../validators/issue");
 
 const router = express.Router();
 
-router.get("/", auth, getIssues);
+router.get("/", auth, paginationValidator, getIssues);
 router.get("/:issue_id(\\d+)", auth, getIssueById);
-router.post("/add", auth, addIssue);
-router.put("/:issue_id(\\d+)/update", projectLeadAuth, updateIssue);
+router.post("/add", auth, issueSchemaValidator, addIssue);
+router.put(
+  "/:issue_id(\\d+)/update",
+  projectLeadAuth,
+  issueSchemaValidator,
+  updateIssue
+);
 router.put(
   "/:issue_id(\\d+)/update-status",
   projectLeadAuth,
+  issueStatusValidator,
   updateIssueStatus
 );
 
