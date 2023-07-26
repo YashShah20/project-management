@@ -6,7 +6,7 @@ const projectSchemaValidator = [
   checkSchema({
     title: {
       require: true,
-      isAlphanumeric: true,
+      isAlphaNumericWithSpace: true,
       isLength: {
         options: {
           min: 5,
