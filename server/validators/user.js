@@ -22,7 +22,7 @@ const profileSchemaValidator = [
   checkSchema({
     first_name: {
       require: true,
-      isAlpha: true,
+      isAlphaWithSpace: true,
       isLength: { options: { min: 5 } },
       errorMessage: "Invalid first name",
     },
@@ -106,7 +106,7 @@ const userSchemaValidator = [
   checkSchema({
     first_name: {
       require: true,
-      isAlpha: true,
+      isAlphaWithSpace: true,
       isLength: {
         options: {
           min: 5,
@@ -119,7 +119,7 @@ const userSchemaValidator = [
           nullable: true,
         },
       },
-      isAlpha: true,
+      isAlphaWithSpace: true,
       isLength: {
         options: {
           min: 5,
