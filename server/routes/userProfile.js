@@ -6,11 +6,17 @@ const {
   deleteUserProfile,
 } = require("../controllers/userProfiles");
 const { adminAuth } = require("../middlewares/auth");
+const { userProfileSchemValidator } = require("../validators/userProfile");
 const router = express.Router();
 
 router.get("/", adminAuth, getUserProfiles);
-router.post("/add", adminAuth, addUserProfile);
-router.put("/:profile_id(\\d+)/update", adminAuth, updateUserProfile);
+router.post("/add", adminAuth, userProfileSchemValidator, addUserProfile);
+router.put(
+  "/:profile_id(\\d+)/update",
+  adminAuth,
+  userProfileSchemValidator,
+  updateUserProfile
+);
 router.delete("/:profile_id(\\d+)/delete", adminAuth, deleteUserProfile);
 
 module.exports = router;
