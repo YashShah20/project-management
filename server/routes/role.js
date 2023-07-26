@@ -6,11 +6,17 @@ const {
   updateRole,
   deleteRole,
 } = require("../controllers/role");
+const { roleSchemaValidator } = require("../validators/role");
 const router = express.Router();
 
 router.get("/", adminAuth, getRoles);
-router.post("/add", adminAuth, addRole);
-router.put("/:role_id(\\d+)/update", adminAuth, updateRole);
+router.post("/add", adminAuth, roleSchemaValidator, addRole);
+router.put(
+  "/:role_id(\\d+)/update",
+  adminAuth,
+  roleSchemaValidator,
+  updateRole
+);
 router.delete("/:role_id(\\d+)/delete", adminAuth, deleteRole);
 
 module.exports = router;
