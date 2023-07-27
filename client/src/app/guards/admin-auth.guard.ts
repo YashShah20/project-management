@@ -23,7 +23,7 @@ import { CookieService } from 'ngx-cookie-service';
 //   }
 
 // };
-
+let x = false
 export const adminAuthGuard: CanActivateFn = (route, state) => {
   let auth = inject(UserService);
   let router = inject(Router);
@@ -31,8 +31,9 @@ export const adminAuthGuard: CanActivateFn = (route, state) => {
   let cookie = inject(CookieService);
 
   if (auth.isAdminSignedIn() ) {
-    
+
     console.log('new auth guard true');
+    
     // router.navigate(['admin'])
     return true;
   } else {
