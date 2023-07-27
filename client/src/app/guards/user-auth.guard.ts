@@ -16,7 +16,7 @@ export const userAuthGuard: CanActivateFn = (route, state) => {
     // router.navigate(['user'])
     return true;
   } else {
-    console.log('auth guard false');
+    console.log('user auth guard false');
     toast.error('Unauthorised Access', 'Error');
     router.navigate(['']);
     return false;
