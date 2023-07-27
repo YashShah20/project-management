@@ -9,7 +9,7 @@ export const AdminLayoutRoutes: Routes = [
     {path: 'dashboard', component: AdminDashboardComponent},
     {path: 'projects', component: AllProjectsComponent},
     {path: 'users', component: AllUsersComponent},
-    {path: '', redirectTo: 'dashboard', pathMatch: 'prefix'}
+    {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}
     // {path: }
 ];
 

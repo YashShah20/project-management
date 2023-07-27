@@ -39,6 +39,8 @@ export class NavbarComponent implements OnInit{
 
   ngOnInit() {
     this.isAdmin = this.auth.is_admin
+    console.log();
+    
     
     // this.menuItems = ROUTES.filter((menuItem) => menuItem);
     // this.menuItems = ROUTES.filter((menuItem) => menuItem);

@@ -16,7 +16,6 @@ export class ProjectTabsComponent {
   }
   setTab(index:number) {
     this.activatedTab = index;
-    debugger;
     this.onTabChange.emit(this.activatedTab);
   }
 }

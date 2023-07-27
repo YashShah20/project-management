@@ -47,6 +47,15 @@ export class SignInComponent implements OnInit {
           this.cookieService.set('token', res?.token)
           // alert(`${this.loginForm.value['email']} Logged In`)
           console.log("Logged In.");
+          this.userService.user = {
+            id: res?.id,
+            email: res?.email,
+            first_name: res?.first_name,
+            last_name: res?.last_name,
+            is_admin: res?.is_admin
+          }
+          this.cookieService.set('user', JSON.stringify(res))
+          
 
           this.userService.is_admin = res?.user.is_admin
 

@@ -15,8 +15,22 @@ export class UserService {
   is_admin: boolean = false;
   user!: UserModel;
   
-  isSignedIn(): boolean {
-    if(!!(this.cookieService.get('token'))) {
+  isAdminSignedIn(): boolean {
+    if(!!(this.cookieService.get('token')) && JSON.parse(this.cookieService.get('user'))['user']['is_admin']) {
+      // console.log("JSON.parse(this.cookieService.get('user'))['is_admin']", JSON.parse(this.cookieService.get('user'))['user']['is_admin']);
+      
+      this.is_admin = true;
+      console.log("user service cookie service true");
+      return true;
+    }
+    else {
+      console.log("user service cookie service false");
+      return false;
+    }
+  }
+
+  isUserSignedIn(): boolean {
+    if(!!(this.cookieService.get('token')) ) {
       console.log("user service cookie service true");
       return true;
     }
