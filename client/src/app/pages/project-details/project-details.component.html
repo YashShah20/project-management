@@ -208,16 +208,26 @@
           <h3 class="my-4">PROJECT TASKS</h3>
         </div>
 
+        <!-- completion_date :  "2022-12-24T18:30:00.000Z" 
+          description :  "Insertion of Feeding Device into Jejunum, Percutaneous Approach" 
+          due_date :  "2022-12-15T18:30:00.000Z" 
+          id :  38 
+          priority_level :  1 
+          project_id :  7 
+          status :  1 
+          title :  "De-engineered system-worthy database" -->
+
         <div class="container">
           <table class="table mt-5">
             <thead>
               <tr>
                 <th scope="col">S No.</th>
-                <th scope="col">Name</th>
                 <th scope="col">Title</th>
-                <th scope="col">Role</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                <th style="width: 40%;" scope="col">Description</th>
+                <th scope="col">Deadline</th>
+                <th scope="col">Finish date</th>
+                <th scope="col">Priority</th>
+                <th scope="col">&nbsp;&nbsp;&nbsp;&nbsp;Action</th>
               </tr>
             </thead>
         
@@ -228,29 +238,25 @@
             </div>
         
             <tbody *ngIf="!loader">
-              <tr *ngFor="let user of projectDetails['project_users']; let indexOfelement = index">
+              <tr *ngFor="let task of taskList; let indexOfelement = index">
                 <th scope="row">{{ indexOfelement + 1 }}</th>
-                <td
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  [title]="[user.email]"
-                >
-                  {{ user.first_name }} {{user.last_name}}
+                <td [title]="['project id: '+task.project_id]">
+                  {{ task.title }}
                 </td>
-                <td>{{ user.user_profile_title }}</td>
-                <td >{{ user.role_title | titlecase}}</td>
-                <td >
-                  <h3>
-                    <span class="badge rounded-pill {{ user.is_active ? 'bg-primary' : 'bg-danger' }}">{{ user.is_active ? "Active" : "In-Active" }}</span>
-                  </h3>
-                </td>
+                <td>{{ task.description }}</td>
+                <td >{{ task.due_date | date}}</td>
+                <td >{{ task.completion_date || 'not completed' | date}}</td>
+                <td >{{ task.status || 'not provided'}}</td>
                 <td>
                   <!-- <a
                     class="btn btn-outline-secondary btn-sm mx-1"
                     [routerLink]="['/user/project-detail', project.id]"
                     >View</a
                   > -->
-                  <button class="btn btn-sm btn-dark" (click)="openProjectUserUpdateModal(updateProjectUserModal)" >View</button>
+                  <div class="d-flex justify-content-center">
+                    <button title="edit" class="btn btn-sm btn-outline-dark me-1" (click)="openProjectTaskUpdateModal(updateProjectUserModal, indexOfelement)" ><i class="fa fa-pencil " aria-hidden="true"></i></button>
+                    <button title="view" class="btn btn-sm btn-outline-dark me-1" (click)="openProjectTaskUpdateModal(viewProjectTaskModal, indexOfelement)" ><i class="fa fa-eye " aria-hidden="true"></i></button>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -269,6 +275,30 @@
         </div>
 
         <ng-template #updateProjectUserModal let-modal>
+          <div class="modal-header mb-3">
+            <h1 class="modal-title my-1">Update User Activity</h1>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="updateProjectUserForm" class="row g-3">
+              <!-- Add your form controls here -->
+              <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="project_id">Project Id:</label>
+                <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateProjectUser()">Update</button>
+          </div>
+        </ng-template>
+
+        <ng-template #viewProjectTaskModal let-modal>
           <div class="modal-header mb-3">
             <h1 class="modal-title my-1">Update User Activity</h1>
             <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">

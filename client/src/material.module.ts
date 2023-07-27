@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconAnchor } from "@angular/material/button";
 
 
 @NgModule({
@@ -20,7 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
-        MatDialogModule
+        MatDialogModule,
     ]
 })
 

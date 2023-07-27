@@ -36,7 +36,7 @@ export const adminAuthGuard: CanActivateFn = (route, state) => {
     // router.navigate(['admin'])
     return true;
   } else {
-    console.log('auth guard false');
+    console.log('admin auth guard false');
     toast.error('Unauthorised Access', 'Error');
     router.navigate(['']);
     return false;

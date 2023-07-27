@@ -21,6 +21,8 @@ export class ProjectDetailsComponent implements OnInit {
   updateForm!: FormGroup;
   allDevList: any[] = [];
 
+  taskList: any[] = [];
+
   updateProjectUserForm!: FormGroup;
 
   projectStatusOptions: any[] = PROJECT_STATUS;
@@ -141,6 +143,11 @@ export class ProjectDetailsComponent implements OnInit {
     
   }
 
+  openProjectTaskUpdateModal(modal: any, index: any, form: any = this.taskList) {
+    this.modalService.open(modal, { size: 'lg' });
+    this.initializeModal(form[index]);
+  }
+
   addDeveloper() {
     
   }
@@ -180,6 +187,14 @@ export class ProjectDetailsComponent implements OnInit {
         this.loader = false;
       },
     });
+
+    this.projectService.getTasksByProjectId(this.id).subscribe({
+      next: (res) => {
+        this.taskList = res
+        console.log(this.taskList);
+        
+      }
+    })
 
     this.userService.fetchAllDevList().subscribe((devList) => {
       this.allDevList = <any[]>devList
