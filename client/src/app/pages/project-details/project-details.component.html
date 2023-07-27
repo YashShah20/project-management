@@ -1,75 +1,303 @@
-<!-- <div class="content">
-    <h2>Project Details</h2>
-    <div class="body">
-        {{projectDetails | json}}
-    </div>
-    <div class="container">
-        <button class="btn btn-outline-secondary btn-sm" (click)="onClickUpdate()">Update</button>
-    </div>
-</div> -->
+
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="project-info-box mt-0">
-                <a class="btn btn-sm btn-dark my-3" routerLink="/user/user-projects">Back</a>
-                <h3>PROJECT DETAILS</h3>
-                <!-- <p class="mb-0">Vivamus pellentesque, felis in aliquam ullamcorper, lorem tortor porttitor erat, hendrerit porta nunc tellus eu lectus. Ut vel imperdiet est. Pellentesque condimentum, dui et blandit laoreet, quam nisi tincidunt tortor.</p> -->
-            </div><!-- / project-info-box -->
+  <div class="row pt-3">
+    <div class="col-12" style="padding-left: 0;">
+      <app-project-tabs [tabsArray]="tabs" (onTabChange)="tabChange($event)"></app-project-tabs>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 dark">
+      <div *ngIf="activatedTabIndex ==0">
 
-            <div *ngIf="loader" class="spinner-section">
-                <div  class="spinner-border text-secondary" role="status">
-                  <span class="visually-hidden">Loading...</span>
+        <div class="d-flex justify-content-center my-4">
+          <h3>PROJECT DETAILS</h3>
+        </div>
+
+        <div class="container">
+          <div class="row">
+              <div class="col-md-8">
+      
+                  <div *ngIf="loader" class="spinner-section">
+                      <div  class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                  </div>
+      
+                  <div *ngIf="!loader" class="project-info-box">
+                      <p><b>Title:</b> {{projectDetails?.title}}</p>
+                      <p><b>Description:</b> {{projectDetails?.description}}</p>
+                      <p><b>Start Date:</b> {{projectDetails?.start_date | date}}</p>
+                      <p class="uppercase"><b>Status:</b> {{projectDetails?.status | status }}</p>
+                      <p><b>Developers:</b> {{projectDevlopers}}</p>
+                      <p class="mb-0"><b>Project Lead:</b> {{projectLead}} <button class="mx-2 btn btn-outline-secondary btn-sm" (click)="openFormUpdateModal(updateModal)">Update</button></p>
+                  </div>
+      
+              </div>
+      
+          </div>
+        </div>
+      
+        <ng-template #updateModal let-modal>
+          <div class="modal-header mb-3">
+            <h1 class="modal-title my-1">Update Project Details</h1>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="updateForm" class="row g-3">
+              <!-- Add your form controls here -->
+              <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="project_id">Project Id:</label>
+                <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="title">Title:</label>
+                <input type="text" class="form-control" id="title" formControlName="title">
+              </div>
+              <!-- <hr class="hr mb-2"> -->
+      
+              <div class="form-group col-md-12">
+                  <label class="text-muted" for="description">Description:</label>
+                  <textarea type="text" class="form-control" id="description" rows="2" formControlName="description"></textarea>
+              </div>
+              <div class="form-group col-md-6">
+                  <label class="text-muted" for="start_date">Project Start Date: &nbsp;{{updateForm.controls['start_date'].value | date}}</label>
+                  <input type="date" class="form-control" id="start_date" formControlName="start_date">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="end_date">Project End Date: &nbsp;{{updateForm.controls['end_date'].value | date}}</label>
+                <input type="date" class="form-control" id="end_date" formControlName="end_date">
+              </div>
+              <div class="form-group col-md-6">
+                  <label class="text-muted" for="status">Status:</label>
+                  <!-- <input type="text" class="form-control" id="status" formControlName="status"> -->
+                  <select class="form-control" formControlName="status" (change)="onChangeStatus()">
+                    <option class="form-control" *ngFor="let status of projectStatusOptions" [ngValue]="status['id']">
+                      {{ status['title'] }}
+                    </option>
+                  </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="project_lead">Project Lead:</label>
+                <input type="text" class="form-control" [value]="projectLead" disabled>
+              </div>
+              <!-- <div class="form-group col-md-11">
+                <label class="text-muted" for="devs">Project Developers:</label>
+                <input list="dev-list" type="text" id="devs" class="form-control">
+                <datalist id="dev-list">
+                  <option class="form-control" *ngFor="let developer of allDevList">{{developer.first_name}} {{developer.last_name}} [{{developer.email || 'email not available'}} - {{developer.mobile_number || 'contact not available'}}] </option>
+                </datalist>
+                <div class="d-flex flex-wrap">
+                  <button type="button" class="btn btn-outline-primary btn-sm my-2 me-1"
+                    *ngFor="let dev of projectDetails.project_users; index as idx" [ngClass]="(dev.role_title === 'lead') ? 'btn-primary text-white' : 'btn-outline-primary'" >
+                    {{dev.first_name || 'No Title Provided'}} {{dev.last_name}}
+                  </button>
                 </div>
               </div>
+              <div class="form-group col-md-1">
+                <button class="btn btn-sm btn-dark align my-4" (click)="addDeveloper()">Add</button>
+              </div> -->
+              
+              <!-- Add more form controls as needed -->
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateProject()">Update</button>
+          </div>
+        </ng-template>
+      </div>
 
-            <div *ngIf="!loader" class="project-info-box">
-                <p><b>Title:</b> {{projectDetails?.title}}</p>
-                <p><b>Description:</b> {{projectDetails?.description}}</p>
-                <p><b>Start Date:</b> {{projectDetails?.start_date | date}}</p>
-                <p><b>Status:</b> {{projectDetails?.status | status}}</p>
-                <p><b>Developers:</b> {{projectDevlopers}}</p>
-                <p class="mb-0"><b>Project Lead:</b> {{projectLead}} <button class="mx-2 btn btn-outline-secondary btn-sm" (click)="openFormUpdateModal(updateModal)">Update</button></p>
-            </div>
-
+      <div *ngIf="activatedTabIndex ==1">
+        <div class="d-flex justify-content-center">
+          <h3 class="my-4">PROJECT DEVELOPERS</h3>
         </div>
 
+        <div class="container">
+          <table class="table mt-5">
+            <thead>
+              <tr>
+                <th scope="col">S No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Title</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+        
+            <div *ngIf="loader" class="spinner-section">
+              <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+        
+            <tbody *ngIf="!loader">
+              <tr *ngFor="let user of projectDetails['project_users']; let indexOfelement = index">
+                <th scope="row">{{ indexOfelement + 1 }}</th>
+                <td
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  [title]="[user.email]"
+                >
+                  {{ user.first_name }} {{user.last_name}}
+                </td>
+                <td>{{ user.user_profile_title }}</td>
+                <td >{{ user.role_title | titlecase}}</td>
+                <td >
+                  <h3>
+                    <span class="badge rounded-pill {{ user.is_active ? 'bg-primary' : 'bg-danger' }}">{{ user.is_active ? "Active" : "In-Active" }}</span>
+                  </h3>
+                </td>
+                <td>
+                  <!-- <a
+                    class="btn btn-outline-secondary btn-sm mx-1"
+                    [routerLink]="['/user/project-detail', project.id]"
+                    >View</a
+                  > -->
+                  <button class="btn btn-sm btn-dark" (click)="openProjectUserUpdateModal(updateProjectUserModal)" >View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex align-items-center justify-content-center">
+            <img
+              class="m-2"
+              width="30%" *ngIf="projectDevlopers?.length===0"
+              src="./../../../assets/svg/empty_table.svg"
+              alt="enpty svg"
+            />
+          </div>
+          <div *ngIf="projectDevlopers?.length===0" class="d-flex justify-content-center">
+            <h3 class="p-2">Empty List</h3>
+          </div>
+        </div>
+
+        <ng-template #updateProjectUserModal let-modal>
+          <div class="modal-header mb-3">
+            <h1 class="modal-title my-1">Update User Activity</h1>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="updateProjectUserForm" class="row g-3">
+              <!-- Add your form controls here -->
+              <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="project_id">Project Id:</label>
+                <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateProjectUser()">Update</button>
+          </div>
+        </ng-template>
+      
+      </div>
+
+      <div *ngIf="activatedTabIndex ==2">
+        <div class="d-flex justify-content-center">
+          <h3 class="my-4">PROJECT TASKS</h3>
+        </div>
+
+        <div class="container">
+          <table class="table mt-5">
+            <thead>
+              <tr>
+                <th scope="col">S No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Title</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+        
+            <div *ngIf="loader" class="spinner-section">
+              <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+        
+            <tbody *ngIf="!loader">
+              <tr *ngFor="let user of projectDetails['project_users']; let indexOfelement = index">
+                <th scope="row">{{ indexOfelement + 1 }}</th>
+                <td
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  [title]="[user.email]"
+                >
+                  {{ user.first_name }} {{user.last_name}}
+                </td>
+                <td>{{ user.user_profile_title }}</td>
+                <td >{{ user.role_title | titlecase}}</td>
+                <td >
+                  <h3>
+                    <span class="badge rounded-pill {{ user.is_active ? 'bg-primary' : 'bg-danger' }}">{{ user.is_active ? "Active" : "In-Active" }}</span>
+                  </h3>
+                </td>
+                <td>
+                  <!-- <a
+                    class="btn btn-outline-secondary btn-sm mx-1"
+                    [routerLink]="['/user/project-detail', project.id]"
+                    >View</a
+                  > -->
+                  <button class="btn btn-sm btn-dark" (click)="openProjectUserUpdateModal(updateProjectUserModal)" >View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex align-items-center justify-content-center">
+            <img
+              class="m-2"
+              width="30%" *ngIf="projectDevlopers?.length===0"
+              src="./../../../assets/svg/empty_table.svg"
+              alt="enpty svg"
+            />
+          </div>
+          <div *ngIf="projectDevlopers?.length===0" class="d-flex justify-content-center">
+            <h3 class="p-2">Empty List</h3>
+          </div>
+        </div>
+
+        <ng-template #updateProjectUserModal let-modal>
+          <div class="modal-header mb-3">
+            <h1 class="modal-title my-1">Update User Activity</h1>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="updateProjectUserForm" class="row g-3">
+              <!-- Add your form controls here -->
+              <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
+              <div class="form-group col-md-6">
+                <label class="text-muted" for="project_id">Project Id:</label>
+                <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="updateProjectUser()">Update</button>
+          </div>
+        </ng-template>
+      
+      </div>
+
+      
     </div>
+  </div>
 </div>
 
-<ng-template #updateModal let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title">Update Project Details</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="updateForm">
-        <!-- Add your form controls here -->
-        <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" class="form-control" id="title" formControlName="title">
-        </div>
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <input type="text" class="form-control" id="description" formControlName="description">
-        </div>
-        <div class="form-group">
-            <label for="start_date">Start Date:</label>
-            <input type="text" class="form-control" id="start_date" formControlName="start_date">
-        </div>
-        <div class="form-group">
-            <label for="status">Status:</label>
-            <input type="text" class="form-control" id="status" formControlName="status">
-        </div>
-        
-        <!-- Add more form controls as needed -->
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="saveForm()">Save</button>
-    </div>
-  </ng-template>
+
 

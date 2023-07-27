@@ -15,7 +15,7 @@
     </thead>
 
     <div *ngIf="loader" class="spinner-section">
-      <div  class="spinner-border text-secondary" role="status">
+      <div class="spinner-border text-secondary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
@@ -24,16 +24,33 @@
       <tr *ngFor="let project of projectList; let indexOfelement = index">
         <!-- <app-project-details></app-project-details> -->
         <th scope="row">{{ indexOfelement + 1 }}</th>
-        <td data-bs-toggle="tooltip" data-bs-placement="top" [title]=[project.description] >{{ project.title }}</td>
+        <td
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          [title]="[project.description]"
+        >
+          {{ project.title }}
+        </td>
         <td>{{ project.start_date | date }}</td>
-        <td>{{ project.status}}</td>
+        <td >{{ project.status | status }}</td>
         <td>
-          <a class="btn btn-outline-secondary btn-sm mx-1"
-            [routerLink]="['/user/project-detail', project.id]">View</a>
+          <a
+            class="btn btn-outline-secondary btn-sm mx-1"
+            [routerLink]="['/user/project-detail', project.id]"
+            >View</a
+          >
         </td>
       </tr>
     </tbody>
   </table>
+  <div class="d-flex align-items-center justify-content-center">
+    <img
+      class="m-2"
+      width="40%" *ngIf="projectList?.length===0"
+      src="./../../../assets/svg/empty_table.svg"
+      alt=""
+    />
+  </div>
 </div>
 
 <!-- <div class="container-fluid mt-8">

@@ -41,7 +41,9 @@ import { StatusPipe } from './pipes/status.pipe';
         ReactiveFormsModule,
         ComponentsModule,
         BrowserAnimationsModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({
+            preventDuplicates: true
+        }),
         MaterialModule
     ]
 })

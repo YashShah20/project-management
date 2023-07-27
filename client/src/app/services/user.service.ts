@@ -26,6 +26,10 @@ export class UserService {
     }
   }
 
+  fetchAllDevList() {
+    return this.http.get(`${BASE_URL}/user/all?per_page=1000`)
+  }
+
   signin(credentials: any): Observable<any> {
     return this.http.post(`${BASE_URL}/user/signin`, credentials);
   }

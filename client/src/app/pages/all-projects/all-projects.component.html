@@ -1,0 +1,60 @@
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+    <div class="container-fluid"></div>
+  </div>
+  
+  <div class="container">
+    <table class="table mt-5">
+      <thead>
+        <tr>
+          <th class="text-muted" scope="col">S No.</th>
+          <th class="text-muted" scope="col">Title</th>
+          <th class="text-muted" scope="col">Start Date</th>
+          <th class="text-muted" scope="col">Status</th>
+          <th class="text-muted" scope="col">Action</th>
+        </tr>
+      </thead>
+  
+      <div *ngIf="loader" class="spinner-section">
+        <div class="spinner-border text-secondary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+  
+      <tbody *ngIf="!loader">
+        <tr *ngFor="let project of projectList; let indexOfelement = index">
+          <!-- <app-project-details></app-project-details> -->
+          <th scope="row">{{ indexOfelement + 1 }}</th>
+          <td
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            [title]="[project.description]"
+          >
+            {{ project.title }}
+          </td>
+          <td>{{ project.start_date | date }}</td>
+          <td >{{ project.status  }}</td>
+          <td>
+            <a
+              class="btn btn-outline-secondary btn-sm mx-1"
+              [routerLink]="['/user/project-detail', project.id]"
+              >View</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex flex-column align-items-center">
+        <div class="d-flex p-2 justify-content-center">
+            <img
+              class=""
+              width="45%" *ngIf="projectList?.length===0"
+              src="./../../../assets/svg/empty_table.svg"
+              alt=""
+            />
+        </div>
+        <div class="">
+            <h2 class="display-1 my-3 text-large">List Empty</h2>
+        </div>
+    </div>
+  </div>
+  

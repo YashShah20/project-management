@@ -85,12 +85,13 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cookieService.deleteAll();
     
     this.loginForm = this.fb.group({
-      email: ['user1@project.com', [Validators.required, Validators.email]],
+      email: ['user1@exelica.com', [Validators.required, Validators.email]],
       password: ['abc', [Validators.required]]
     })
+
+    this.cookieService.deleteAll();
   }
 
 }

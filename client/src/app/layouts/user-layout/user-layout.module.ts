@@ -17,6 +17,8 @@ import { ProjectDetailsComponent } from '../../pages/project-details/project-det
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProjectListComponent } from 'src/app/pages/project-list/project-list.component';
+import { ProjectTabsComponent } from '../../pages/project-tabs/project-tabs.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     UserDashboardComponent,
     UserProfileComponent,
     StatusPipe,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
+    ProjectListComponent,
+    ProjectTabsComponent
   ],
   imports: [
     CommonModule,
