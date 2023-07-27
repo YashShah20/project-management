@@ -119,6 +119,7 @@ export class ProjectDetailsComponent implements OnInit {
       start_date: [projectDetails?.start_date, Validators.required],
       end_date: [projectDetails?.end_date, Validators.required],
       status: [projectDetails?.status, Validators.required],
+      lead_id: [1]
     });
   }
 
