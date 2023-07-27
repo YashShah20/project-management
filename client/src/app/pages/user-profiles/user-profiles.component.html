@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between mb-3">
+    <div class="h3 text-center">User Profiles</div>
+    <button class="btn btn-dark" (click)="showAdd = true">New</button>
+  </div>
+  <div class="mx-3 d-block">
+    <app-add-user-profile
+      *ngIf="showAdd"
+      (profileAdded)="addProfile($event)"
+    ></app-add-user-profile>
+  </div>
+  <div>
+    <ol class="list-group list-group-light list-group-numbered">
+      <app-user-profile-details
+        *ngFor="let profile of userProfileList; index as i"
+        [index]="i"
+        [profile]="profile"
+        (profileUpdated)="updateProfile($event)"
+        (profileDeleted)="deleteProfile($event)"
+      ></app-user-profile-details>
+    </ol>
+  </div>
+</div>

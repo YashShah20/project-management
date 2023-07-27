@@ -1,0 +1,52 @@
+<li
+  *ngIf="!showUpdate"
+  class="list-group-item d-flex justify-content-between align-items-start mb-1"
+>
+  <div class="h5">{{ index + 1 }}</div>
+  <div class="ms-2 me-auto">
+    <div class="h5">{{ profile?.title }}</div>
+    <span>{{ profile?.description }}</span>
+  </div>
+  <div>
+    <button
+      class="btn btn-sm rounded-lg btn-primary me-2"
+      (click)="showUpdate = true"
+    >
+      update
+    </button>
+    <button class="btn btn-sm rounded-lg btn-danger" (click)="deleteProfile()">
+      delete
+    </button>
+  </div>
+</li>
+<li
+  *ngIf="showUpdate"
+  class="list-group-item d-flex justify-content-between align-items-start mb-1"
+>
+  <form class="form" [formGroup]="updatedProfile">
+    <div class="h5">{{ index + 1 }}</div>
+    <div class="ms-2 me-auto">
+      <div class="mb-3">
+        <label class="mb-1">Title</label>
+        <input type="text" class="form-control" formControlName="title" />
+      </div>
+      <div class="mb-3">
+        <label class="mb-1">Description</label>
+        <textarea
+          type="text"
+          class="form-control"
+          formControlName="description"
+        ></textarea>
+      </div>
+    </div>
+    <div>
+      <button
+        type="submit"
+        class="btn btn-sm rounded-lg btn-primary me-2"
+        (click)="updateProfile()"
+      >
+        update
+      </button>
+    </div>
+  </form>
+</li>

@@ -1,0 +1,20 @@
+<div class="mb-3">
+  <form class="form" [formGroup]="userProfile" (submit)="addProfile()">
+    <div class="h4 mb-3">Add New User Profile</div>
+    <div class="mb-3">
+      <label class="mb-1"> Title </label>
+      <input type="text" class="form-control" formControlName="title" />
+    </div>
+    <div class="mb-3">
+      <label class="mb-1"> Description </label>
+      <textarea
+        type="text"
+        class="form-control"
+        formControlName="description"
+      ></textarea>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </form>
+</div>

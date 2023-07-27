@@ -10,21 +10,30 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { CreateUserComponent } from '../../pages/create-user/create-user.component';
 import { AllUsersComponent } from 'src/app/pages/all-users/all-users.component';
 import { AllProjectsComponent } from '../../pages/all-projects/all-projects.component';
-
+import { UserProfilesComponent } from '../../pages/user-profiles/user-profiles.component';
+import { UserProfilesService } from 'src/app/services/user-profiles.service';
+import { UserProfileDetailsComponent } from '../../pages/user-profile-details/user-profile-details.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AddUserProfileComponent } from '../../pages/add-user-profile/add-user-profile.component';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
     CreateUserComponent,
     AllUsersComponent,
-    AllProjectsComponent
+    AllProjectsComponent,
+    UserProfilesComponent,
+    UserProfileDetailsComponent,
+    AddUserProfileComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     RouterModule.forChild(AdminLayoutRoutes),
 
-    ComponentsModule
-  ]
+    ComponentsModule,
+    ReactiveFormsModule,
+  ],
+  providers: [UserProfilesService],
 })
-export class AdminLayoutModule { }
+export class AdminLayoutModule {}

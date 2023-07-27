@@ -16,6 +16,7 @@ export const ADMIN_ROUTES: RouteInfo[] = [
   { path: 'projects', title: 'Projects', icon: 'projects', class: '', children: [] },
   { path: 'notifications', title: 'Notification', icon: 'notifications_active', class: '', children: [] },
   { path: 'users', title: 'Users', icon: 'user', class: '', children: [] },
+  { path: 'user-profiles', title: 'User Profiles', icon: 'user', class: '', children: [] },
 ];
 
 export const USER_ROUTES: RouteInfo[] = [
