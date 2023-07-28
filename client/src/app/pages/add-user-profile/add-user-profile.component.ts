@@ -28,7 +28,7 @@ export class AddUserProfileComponent {
         this.addProfileEvent.emit(res);
       },
       error: (error) => {
-        this.toast.error(error.error);
+        this.toast.error(error.error,"Error");
       },
     });
   }

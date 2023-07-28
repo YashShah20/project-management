@@ -5,14 +5,15 @@ import { AdminDashboardComponent } from 'src/app/pages/admin-dashboard/admin-das
 import { AllProjectsComponent } from 'src/app/pages/all-projects/all-projects.component';
 import { AllUsersComponent } from 'src/app/pages/all-users/all-users.component';
 import { UserProfilesComponent } from 'src/app/pages/user-profiles/user-profiles.component';
+import { UserRoleListComponent } from 'src/app/pages/user-role-list/user-role-list.component';
 
 export const AdminLayoutRoutes: Routes = [
-    {path: 'dashboard', component: AdminDashboardComponent},
-    {path: 'projects', component: AllProjectsComponent},
-    {path: 'users', component: AllUsersComponent},
-    {path: 'user-profiles', component: UserProfilesComponent},
-    {path: '', redirectTo: 'dashboard', pathMatch: 'prefix'},
-    {path: '**', redirectTo: 'dashboard', pathMatch: 'full'},
-    // {path: }
+  { path: 'dashboard', component: AdminDashboardComponent },
+  { path: 'projects', component: AllProjectsComponent },
+  { path: 'users', component: AllUsersComponent },
+  { path: 'user-profiles', component: UserProfilesComponent },
+  { path: 'user-roles', component: UserRoleListComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'prefix' },
+  { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
+  // {path: }
 ];
-

@@ -1,0 +1,50 @@
+<li
+  *ngIf="!showUpdate"
+  class="list-group-item d-flex justify-content-between align-items-start mb-1"
+>
+  <div class="h5">{{ index + 1 }}</div>
+  <div class="ms-2 me-auto">
+    <div class="h5 text-uppercase">{{ role?.title }}</div>
+    <span>Access Level: </span>
+    <span class="text-muted">{{ role?.access_level | accessLevel }}</span>
+  </div>
+  <div>
+    <button
+      class="btn btn-sm rounded-lg btn-primary me-2"
+      (click)="showUpdate = true"
+    >
+      update
+    </button>
+    <button class="btn btn-sm rounded-lg btn-danger" (click)="deleteRole()">
+      delete
+    </button>
+  </div>
+</li>
+<li
+  *ngIf="showUpdate"
+  class="list-group-item d-flex justify-content-between align-items-start mb-1"
+>
+  <form class="form" [formGroup]="updatedRole" (submit)="updateRole()">
+    <div class="h5">{{ index + 1 }}</div>
+    <div class="ms-2 me-auto">
+      <div class="mb-3">
+        <label class="mb-1">Title</label>
+        <input type="text" class="form-control" formControlName="title" />
+      </div>
+      <div class="mb-3">
+        <label class="mb-1">Access Level</label>
+        <select class="form-select" formControlName="access_level">
+          <option value="0" disabled>choose</option>
+          <option [value]="level.value" *ngFor="let level of accessLevel">
+            {{ level.title }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-sm rounded-lg btn-primary me-2">
+        update
+      </button>
+    </div>
+  </form>
+</li>

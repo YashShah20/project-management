@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { ProjectService } from '../services/project.service';
 import { UserProfilesService } from '../services/user-profiles.service';
+import { UserRolesService } from '../services/user-roles.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -17,7 +18,8 @@ export class TokenInterceptor implements HttpInterceptor {
     private cookieService: CookieService,
     private userService: UserService,
     private projectService: ProjectService,
-    private userProfilesService: UserProfilesService
+    private userProfilesService: UserProfilesService,
+    private userRolesService: UserRolesService
   ) {}
   intercept(
     req: HttpRequest<any>,

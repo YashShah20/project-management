@@ -1,0 +1,21 @@
+<div class="mb-3">
+  <form class="form" [formGroup]="userRole" (submit)="addRole()">
+    <div class="h4 mb-3">Add New User Role</div>
+    <div class="mb-3">
+      <label class="mb-1"> Title </label>
+      <input type="text" class="form-control" formControlName="title" />
+    </div>
+    <div class="mb-3">
+      <label class="mb-1"> Access Level </label>
+      <select class="form-select" formControlName="access_level">
+        <option value="0" disabled>choose</option>
+        <option [value]="level.value" *ngFor="let level of accessLevel">
+          {{ level.title }}
+        </option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </form>
+</div>

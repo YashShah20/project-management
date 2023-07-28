@@ -14,14 +14,20 @@ export const TASK_PRIORITY = [
   { id: 2, title: 'medium', color: 'text-info' },
   { id: 3, title: 'high', color: 'text-warning' },
   { id: 4, title: 'critical', color: 'text-danger' },
-  { id: 5, title: 'routine', color: 'text-secondary' }
-]
+  { id: 5, title: 'routine', color: 'text-secondary' },
+];
 
 export const TASK_STATUS = [
-  { id: 1, title: "In Progress", color: "text-primary" },
-  { id: 2, title: "On Hold", color: "text-warning" },
-  { id: 3, title: "Completed", color: "text-success" },
-  { id: 4, title: "Delayed", color: "text-danger" },
-  { id: 5, title: "Cancelled", color: "text-secondary" },
-  { id: 6, title: "Not Started", color: "text-info" }
+  { id: 1, title: 'In Progress', color: 'text-primary' },
+  { id: 2, title: 'On Hold', color: 'text-warning' },
+  { id: 3, title: 'Completed', color: 'text-success' },
+  { id: 4, title: 'Delayed', color: 'text-danger' },
+  { id: 5, title: 'Cancelled', color: 'text-secondary' },
+  { id: 6, title: 'Not Started', color: 'text-info' },
+];
+
+export const USER_ACCESS_LEVEL = [
+  { title: 'System', value: 1 },
+  { title: 'Project - Read/Write', value: 2 },
+  { title: 'Project - Read', value: 3 },
 ];

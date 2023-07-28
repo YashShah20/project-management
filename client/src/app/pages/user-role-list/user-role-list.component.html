@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between mb-3">
+    <div class="h3 text-center">User Roles</div>
+    <button class="btn btn-dark" (click)="showAdd = !showAdd">New</button>
+  </div>
+  <div class="mx-3 d-block">
+    <app-add-user-role
+      *ngIf="showAdd"
+      (roleAdded)="addRole($event)"
+    ></app-add-user-role>
+  </div>
+  <div>
+    <ol class="list-group list-group-light list-group-numbered">
+      <app-user-role-item
+        *ngFor="let role of userRoleList; index as i"
+        [index]="i"
+        [role]="role"
+        (roleUpdated)="updateRole($event)"
+        (roleDeleted)="deleteRole($event)"
+      ></app-user-role-item>
+    </ol>
+  </div>
+</div>
