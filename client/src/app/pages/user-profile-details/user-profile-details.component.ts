@@ -41,18 +41,30 @@ export class UserProfileDetailsComponent implements OnInit {
           this.updateProfileEvent.emit(res);
         },
         error: (error) => {
-          this.toast.error(error, 'Error');
+          if (Array.isArray(error.error)) {
+            error.error.map((e: any) => {
+              this.toast.error(`${e.msg} for ${e.path}`, 'Error');
+            });
+          } else {
+            this.toast.error(error.error, 'Error');
+          }
         },
       });
   }
-  
+
   deleteProfile() {
     this.userProfilesService.deleteUserProfile(this.profile.id).subscribe({
       next: (res) => {
         this.deleteProfileEvent.emit(this.profile);
       },
       error: (error) => {
-        this.toast.error(JSON.stringify(error.error), 'Error');
+        if (Array.isArray(error.error)) {
+          error.error.map((e: any) => {
+            this.toast.error(`${e.msg} for ${e.path}`, 'Error');
+          });
+        } else {
+          this.toast.error(error.error, 'Error');
+        }
       },
     });
   }
