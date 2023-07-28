@@ -1,5 +1,5 @@
 const express = require("express");
-const { adminAuth } = require("../middlewares/auth");
+const { adminAuth, auth } = require("../middlewares/auth");
 const {
   getRoles,
   addRole,
@@ -9,7 +9,7 @@ const {
 const { roleSchemaValidator } = require("../validators/role");
 const router = express.Router();
 
-router.get("/", adminAuth, getRoles);
+router.get("/", auth, getRoles);
 router.post("/add", adminAuth, roleSchemaValidator, addRole);
 router.put(
   "/:role_id(\\d+)/update",
