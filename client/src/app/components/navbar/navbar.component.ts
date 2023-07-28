@@ -14,16 +14,16 @@ declare interface RouteInfo {
 export const ADMIN_ROUTES: RouteInfo[] = [ 
   { path: 'dashboard', title: 'Dashboard', icon: 'dashboard', class: '', children: []},
   { path: 'projects', title: 'Projects', icon: 'projects', class: '', children: [] },
-  { path: 'notifications', title: 'Notification', icon: 'notifications_active', class: '', children: [] },
+  // { path: 'notifications', title: 'Notification', icon: 'notifications_active', class: '', children: [] },
   { path: 'users', title: 'Users', icon: 'user', class: '', children: [] },
-  { path: 'user-profiles', title: 'User Profiles', icon: 'user', class: '', children: [] },
-  { path: 'user-roles', title: 'User Roles', icon: 'user', class: '', children: [] },
+  { path: 'user-profiles', title: 'Profiles', icon: 'user', class: '', children: [] },
+  { path: 'user-roles', title: 'Roles', icon: 'user', class: '', children: [] },
 ];
 
 export const USER_ROUTES: RouteInfo[] = [
   { path: 'dashboard', title: 'Dashboard', icon: 'dashboard', class: '', children: []},
   { path: 'user-projects', title: 'Projects', icon: 'projects', class: '', children: [] },
-  { path: 'user-notifications', title: 'Notification', icon: 'notifications_active', class: '', children: [] },
+  // { path: 'user-notifications', title: 'Notification', icon: 'notifications_active', class: '', children: [] },
   { path: 'user-profile', title: 'Profile', icon: 'user', class: '', children: [] },
 ];
 
