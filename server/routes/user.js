@@ -8,6 +8,7 @@ const {
   resetPassword,
   getUsers,
   addUser,
+  getUserById,
 } = require("../controllers/user");
 const { auth, adminAuth } = require("../middlewares/auth");
 const {
@@ -24,6 +25,7 @@ const router = express();
 
 router.post("/signin", signinSchemaValidator, signin);
 router.get("/all", auth, paginationValidator, getUsers);
+router.get("/:user_id(\\d+)", auth, getUserById);
 router.post("/add", adminAuth, userSchemaValidator, addUser);
 router.get("/profile", auth, getProfile);
 router.put("/profile/update", auth, profileSchemaValidator, updateProfile);

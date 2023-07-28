@@ -10,46 +10,59 @@ import { UserModel } from '../classes/user-model';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService,
+    private router: Router
+  ) {}
 
   is_admin: boolean = false;
   user!: UserModel;
-  
+
   isAdminSignedIn(): boolean {
-    if(!!(this.cookieService.get('token')) && JSON.parse(this.cookieService.get('user'))['user']['is_admin']) {
+    if (
+      !!this.cookieService.get('token') &&
+      JSON.parse(this.cookieService.get('user'))['user']['is_admin']
+    ) {
       // console.log("JSON.parse(this.cookieService.get('user'))['is_admin']", JSON.parse(this.cookieService.get('user'))['user']['is_admin']);
-      
+
       this.is_admin = true;
-      console.log("user service cookie service true");
+      console.log('user service cookie service true');
       return true;
-    }
-    else {
-      console.log("user service cookie service false");
+    } else {
+      console.log('user service cookie service false');
       return false;
     }
   }
 
   isUserSignedIn(): boolean {
-    if(!!(this.cookieService.get('token')) ) {
-      console.log("user service cookie service true");
+    if (!!this.cookieService.get('token')) {
+      console.log('user service cookie service true');
       return true;
-    }
-    else {
-      console.log("user service cookie service false");
+    } else {
+      console.log('user service cookie service false');
       return false;
     }
   }
 
   fetchAllDevList() {
-    return this.http.get(`${BASE_URL}/user/all?per_page=1000`)
+    return this.http.get(`${BASE_URL}/user/all?per_page=1000`);
   }
 
   signin(credentials: any): Observable<any> {
     return this.http.post(`${BASE_URL}/user/signin`, credentials);
   }
 
+  addUser(user: any): Observable<any> {
+    return this.http.post(`${BASE_URL}/user/add`, user);
+  }
+
   getProfile() {
     return this.http.get(`${BASE_URL}/user/profile`);
+  }
+
+  getUserById(id: any) {
+    return this.http.get(`${BASE_URL}/user/${id}`);
   }
 
   updateProfile(user: any) {

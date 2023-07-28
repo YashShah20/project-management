@@ -1,1 +1,32 @@
-<p>All Users Component Works</p>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between mb-3">
+    <div class="h3 text-center">Users</div>
+    <button class="btn btn-dark" (click)="showAdd = !showAdd">New</button>
+  </div>
+  <div class="mx-3 d-block">
+    <app-add-user *ngIf="showAdd" (userAdded)="addUser($event)"></app-add-user>
+  </div>
+
+  <ol class="list-group list-group-light list-group-numbered">
+    <li
+      class="list-group-item d-flex justify-content-between border-none align-items-start mb-3"
+      *ngFor="let user of userList; index as i"
+    >
+      <div class="ms-2 me-auto">
+        <div class="h5 text-capitalize">
+          <a [routerLink]="['/admin/users', user.id]">
+            {{ user?.first_name }} {{ user?.last_name }}
+          </a>
+        </div>
+        <div class="mb-1">
+          <span>Email: </span>
+          <span class="text-muted">{{ user?.email }}</span>
+        </div>
+        <div class="mb-1">
+          <span>Mobile: </span>
+          <span class="text-muted">{{ user?.mobile_number }}</span>
+        </div>
+      </div>
+    </li>
+  </ol>
+</div>

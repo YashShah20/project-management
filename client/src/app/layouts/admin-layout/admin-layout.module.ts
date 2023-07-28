@@ -21,6 +21,8 @@ import { UserRoleItemComponent } from '../../pages/user-role-item/user-role-item
 import { AddUserRoleComponent } from '../../pages/add-user-role/add-user-role.component';
 import { AccessLevelPipe } from '../../pipes/access-level.pipe';
 import { UserService } from 'src/app/services/user.service';
+import { UserDetailsComponent } from '../../pages/user-details/user-details.component';
+import { AddUserComponent } from '../../pages/add-user/add-user.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { UserService } from 'src/app/services/user.service';
     UserRoleItemComponent,
     AddUserRoleComponent,
     AccessLevelPipe,
+    UserDetailsComponent,
+    AddUserComponent,
   ],
   imports: [
     CommonModule,

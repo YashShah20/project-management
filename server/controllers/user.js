@@ -222,6 +222,31 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+const getUserById = async (req, res, next) => {
+  try {
+    const { user_id } = req.params;
+    const [user] = (
+      await pool.query(
+        `select id,first_name,last_name,email,mobile_number from users where id=$1;`,
+        [user_id]
+      )
+    ).rows;
+
+    const projects = (
+      await pool.query(
+        "select id,title from projects where id in (select distinct project_id from project_users where user_id = $1)",
+        [user_id]
+      )
+    ).rows;
+
+    res.json({
+      ...user,
+      projects,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 const addUser = async (req, res, next) => {
   try {
     const { first_name, last_name, email, mobile_number } = req.body;
@@ -259,7 +284,7 @@ module.exports = {
   updatePassword,
   forgotPassword,
   resetPassword,
-
+  getUserById,
   getUsers,
   addUser,
 };
