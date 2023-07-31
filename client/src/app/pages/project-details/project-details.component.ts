@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { UserService } from 'src/app/services/user.service';
 import { PROJECT_STATUS } from 'src/app/utils';
@@ -27,7 +28,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   projectStatusOptions: any[] = PROJECT_STATUS;
 
-  tabs: string [] = ['Details','Developers', 'Tasks'];
+  tabs: string[] = ['Details', 'Developers', 'Tasks'];
   activatedTabIndex: number = 0;
 
   constructor(
@@ -37,7 +38,8 @@ export class ProjectDetailsComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private toast: ToastrService,
-    private router: Router
+    private router: Router,
+    private handler: ErrorHandlerService
   ) {}
 
   openModal(content: any) {
@@ -75,10 +77,10 @@ export class ProjectDetailsComponent implements OnInit {
 
           this.modalService.dismissAll();
         },
-        error: (err) => {
-          this.toast.error(err?.error, 'Error');
-          console.log(this.updateForm);
-          console.log(err.error);
+        error: (error) => {
+          this.handler.handle(error);
+          // console.log(this.updateForm);
+          // console.log(err.error);
         },
         complete: () => {
           this.router.navigate(['/user/user-projects']);
@@ -121,7 +123,7 @@ export class ProjectDetailsComponent implements OnInit {
       start_date: [projectDetails?.start_date, Validators.required],
       end_date: [projectDetails?.end_date, Validators.required],
       status: [projectDetails?.status, Validators.required],
-      lead_id: [1]
+      lead_id: [1],
     });
   }
 
@@ -134,23 +136,26 @@ export class ProjectDetailsComponent implements OnInit {
     // You can now use the selectedStatusId as needed, e.g., save it to a variable or perform other actions.
   }
 
-  openProjectUserUpdateModal(modal: any, form: any = this.projectDetails.project_users) {
+  openProjectUserUpdateModal(
+    modal: any,
+    form: any = this.projectDetails.project_users
+  ) {
     this.modalService.open(modal, { size: 'lg' });
     this.initializeModal(form);
   }
 
-  updateProjectUser() {
-    
-  }
+  updateProjectUser() {}
 
-  openProjectTaskUpdateModal(modal: any, index: any, form: any = this.taskList) {
+  openProjectTaskUpdateModal(
+    modal: any,
+    index: any,
+    form: any = this.taskList
+  ) {
     this.modalService.open(modal, { size: 'lg' });
     this.initializeModal(form[index]);
   }
 
-  addDeveloper() {
-    
-  }
+  addDeveloper() {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -178,9 +183,9 @@ export class ProjectDetailsComponent implements OnInit {
           }
         );
       },
-      error: (err) => {
+      error: (error) => {
         this.loader = true;
-        this.toast.error(err?.error, 'ERROR!');
+        this.handler.handle(error);
         this.router.navigate(['/user/user-projects']);
       },
       complete: () => {
@@ -190,16 +195,17 @@ export class ProjectDetailsComponent implements OnInit {
 
     this.projectService.getTasksByProjectId(this.id).subscribe({
       next: (res) => {
-        this.taskList = res
+        this.taskList = res;
         console.log(this.taskList);
-        
-      }
-    })
+      },
+      error: (error) => {
+        this.handler.handle(error);
+      },
+    });
 
     this.userService.fetchAllDevList().subscribe((devList) => {
-      this.allDevList = <any[]>devList
-    })
-    
+      this.allDevList = <any[]>devList;
+    });
   }
 
   tabChange(tabIndex: number) {
