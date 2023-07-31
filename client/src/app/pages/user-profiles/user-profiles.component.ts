@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { UserProfilesService } from 'src/app/services/user-profiles.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class UserProfilesComponent implements OnInit {
 
   constructor(
     private userProfilesService: UserProfilesService,
-    private toast: ToastrService
+    // private toast: ToastrService,
+    private handler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -23,7 +25,8 @@ export class UserProfilesComponent implements OnInit {
         this.userProfileList = res;
       },
       error: (error) => {
-        this.toast.error('Something went wrong', 'Error');
+        this.handler.handle(error);
+        // this.toast.error('Something went wrong', 'Error');
       },
     });
   }

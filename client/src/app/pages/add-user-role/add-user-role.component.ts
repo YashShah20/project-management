@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { UserRolesService } from 'src/app/services/user-roles.service';
 import { USER_ACCESS_LEVEL } from 'src/app/utils';
 
@@ -16,7 +17,8 @@ export class AddUserRoleComponent {
   constructor(
     private fb: FormBuilder,
     private userRolesService: UserRolesService,
-    private toast: ToastrService
+    // private toast: ToastrService,
+    private handler: ErrorHandlerService
   ) {}
 
   userRole = this.fb.group({
@@ -30,13 +32,7 @@ export class AddUserRoleComponent {
         this.addRoleEvent.emit(res);
       },
       error: (error) => {
-        if (Array.isArray(error.error)) {
-          error.error.map((e: any) => {
-            this.toast.error(`${e.msg} for ${e.path}`, 'Error');
-          });
-        } else {
-          this.toast.error(error.error, 'Error');
-        }
+        this.handler.handle(error);
       },
     });
   }

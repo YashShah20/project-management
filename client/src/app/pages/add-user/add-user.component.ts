@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class AddUserComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private toast: ToastrService
+    // private toast: ToastrService,
+    private handler: ErrorHandlerService
   ) {}
 
   addUser() {
@@ -30,13 +32,7 @@ export class AddUserComponent {
         this.addUserEvent.emit(res);
       },
       error: (error) => {
-        if (Array.isArray(error.error)) {
-          error.error.map((e: any) => {
-            this.toast.error(`${e.msg} for ${e.path}`, 'Error');
-          });
-        } else {
-          this.toast.error(error.error, 'Error');
-        }
+        this.handler.handle(error);
       },
     });
   }

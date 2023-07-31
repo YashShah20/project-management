@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -13,9 +14,10 @@ export class UserDetailsComponent implements OnInit {
   user: any;
   constructor(
     private userService: UserService,
-    private toast: ToastrService,
+    // private toast: ToastrService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private handler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -30,13 +32,7 @@ export class UserDetailsComponent implements OnInit {
         this.user = res;
       },
       error: (error) => {
-        if (Array.isArray(error.error)) {
-          error.error.map((e: any) => {
-            this.toast.error(`${e.msg} for ${e.path}`, 'Error');
-          });
-        } else {
-          this.toast.error(error.error, 'Error');
-        }
+        this.handler.handle(error)
         this.router.navigate(['/admin/users']);
       },
     });

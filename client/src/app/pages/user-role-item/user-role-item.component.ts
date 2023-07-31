@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Toast, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { UserRolesService } from 'src/app/services/user-roles.service';
 import { USER_ACCESS_LEVEL } from './../../utils';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 @Component({
   selector: 'app-user-role-item',
   templateUrl: './user-role-item.component.html',
@@ -26,7 +27,8 @@ export class UserRoleItemComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userRolesService: UserRolesService,
-    private toast: ToastrService
+    // private toast: ToastrService,
+    private handler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -42,30 +44,18 @@ export class UserRoleItemComponent implements OnInit {
           this.updateRoleEvent.emit(res);
         },
         error: (error) => {
-          if (Array.isArray(error.error)) {
-            error.error.map((e: any) => {
-              this.toast.error(`${e.msg} for ${e.path}`, 'Error');
-            });
-          } else {
-            this.toast.error(error.error, 'Error');
-          }
+          this.handler.handle(error);
         },
       });
   }
 
   deleteRole() {
     this.userRolesService.deleteRole(this.role?.id).subscribe({
-      next: (res) => {
+      next: () => {
         this.deleteteRoleEvent.emit(this.role.id);
       },
       error: (error) => {
-        if (Array.isArray(error.error)) {
-          error.error.map((e: any) => {
-            this.toast.error(`${e.msg} for ${e.path}`, 'Error');
-          });
-        } else {
-          this.toast.error(error.error, 'Error');
-        }
+        this.handler.handle(error);
       },
     });
   }
