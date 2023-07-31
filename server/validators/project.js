@@ -132,14 +132,20 @@ const projectUsersSchemaValidator = [
             ])
           ).rows;
 
+          const join_date = new Date(value);
+          join_date.setHours(24, 0, 0);
+
+          // return Promise.reject(
+          //   "user can not join before project start date or after completion"
+          // );
           if (
-            value >= project.start_date &&
-            (!project.end_date || value <= project.end_date)
+            join_date >= project.start_date &&
+            (!project.end_date || join_date <= project.end_date)
           ) {
             return Promise.resolve();
           } else {
             return Promise.reject(
-              "user can not join before project start date"
+              "user can not join before project start date or after completion"
             );
           }
         },
