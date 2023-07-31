@@ -6,18 +6,19 @@ import { AuthLayoutComponent } from './auth-layout.component';
 import { SignInComponent } from 'src/app/pages/sign-in/sign-in.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
     // AuthLayoutComponent,
-    SignInComponent
+    SignInComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
     RouterModule.forChild(AuthLayoutRoutes),
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    SharedModule,
+  ],
 })
-export class AuthLayoutModule { }
+export class AuthLayoutModule {}

@@ -23,6 +23,7 @@ import { AccessLevelPipe } from '../../pipes/access-level.pipe';
 import { UserService } from 'src/app/services/user.service';
 import { UserDetailsComponent } from '../../pages/user-details/user-details.component';
 import { AddUserComponent } from '../../pages/add-user/add-user.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { AddUserComponent } from '../../pages/add-user/add-user.component';
 
     ComponentsModule,
     ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [UserProfilesService, UserRolesService, UserService],
 })

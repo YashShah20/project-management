@@ -15,11 +15,11 @@ import { MatTableModule } from '@angular/material/table';
 import { StatusPipe } from 'src/app/pipes/status.pipe';
 import { ProjectDetailsComponent } from '../../pages/project-details/project-details.component';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProjectListComponent } from 'src/app/pages/project-list/project-list.component';
 import { ProjectTabsComponent } from '../../pages/project-tabs/project-tabs.component';
-
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,7 @@ import { ProjectTabsComponent } from '../../pages/project-tabs/project-tabs.comp
     StatusPipe,
     ProjectDetailsComponent,
     ProjectListComponent,
-    ProjectTabsComponent
+    ProjectTabsComponent,
   ],
   imports: [
     CommonModule,
@@ -39,8 +39,9 @@ import { ProjectTabsComponent } from '../../pages/project-tabs/project-tabs.comp
     // MatTableDataSource,
     MatTableModule,
     NgbModule,
-    ReactiveFormsModule
-  ], 
-  providers: [UserService, ProjectService]
+    ReactiveFormsModule,
+    SharedModule,
+  ],
+  providers: [UserService, ProjectService],
 })
-export class UserLayoutModule { }
+export class UserLayoutModule {}
