@@ -16,7 +16,7 @@ const signin = async (req, res, next) => {
       )
     ).rows;
 
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
       return res.status(403).json(`invalid credentials`);

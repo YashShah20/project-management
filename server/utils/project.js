@@ -11,7 +11,7 @@ const getProjectLeadByProjectId = async (project_id) => {
       )
     ).rows;
 
-    console.log(user);
+    // console.log(user);
     return user;
   } catch (error) {
     throw error;
@@ -28,7 +28,7 @@ const getProjectLeadByTaskId = async (task_id) => {
       )
     ).rows;
 
-    console.log("user", user);
+    // console.log("user", user);
     return user;
   } catch (error) {
     console.log(error.message);
@@ -46,7 +46,7 @@ const getProjectLeadByIssueId = async (issue_id) => {
       )
     ).rows;
 
-    console.log("user", user);
+    // console.log("user", user);
     return user;
   } catch (error) {
     console.log(error.message);

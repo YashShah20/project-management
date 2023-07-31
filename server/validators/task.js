@@ -115,7 +115,7 @@ const taskDependenciesSchemaValidator = [
             )
           ).rows;
 
-          console.log(result.count);
+          // console.log(result.count);
 
           const is_cycle = result.count != 0;
           if (!is_cycle) {
