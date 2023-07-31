@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserDetailsComponent implements OnInit {
   user: any;
+  loader: boolean = true
+  
   constructor(
     private userService: UserService,
     // private toast: ToastrService,
@@ -30,10 +32,15 @@ export class UserDetailsComponent implements OnInit {
     this.userService.getUserById(id).subscribe({
       next: (res) => {
         this.user = res;
+
+        this.loader = false;
       },
       error: (error) => {
         this.handler.handle(error)
         this.router.navigate(['/admin/users']);
+        setTimeout(() => {
+          this.loader = false
+        }, 1500)
       },
     });
   }

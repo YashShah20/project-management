@@ -28,93 +28,21 @@
                       <p><b>Title:</b> {{projectDetails?.title}}</p>
                       <p><b>Description:</b> {{projectDetails?.description}}</p>
                       <p><b>Start Date:</b> {{projectDetails?.start_date | date}}</p>
+                      <p><b>End Date:</b> {{(projectDetails?.end_date | date) || 'Not Specified' }}</p>
                       <p class="uppercase"><b>Status:</b> {{projectDetails?.status | status }}</p>
                       <p><b>Developers:</b> {{projectDevlopers}}</p>
-                      <p class="mb-0"><b>Project Lead:</b> {{projectLead}} <button class="mx-2 btn btn-outline-secondary btn-sm" (click)="openFormUpdateModal(updateModal)">Update</button></p>
+                      <p class="mb-0"><b>Project Lead:</b> {{projectLead}} <button class="mx-2 btn btn-outline-secondary btn-sm" (click)="openFormUpdateModal(updateProjectDetailsModal)">Update</button></p>
                   </div>
       
               </div>
-      
           </div>
         </div>
-      
-        <ng-template #updateModal let-modal>
-          <div class="modal-header mb-3">
-            <h1 class="modal-title my-1">Update Project Details</h1>
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
-          </div>
-          <div class="modal-body">
-            <form [formGroup]="updateForm" class="row g-3">
-              <!-- Add your form controls here -->
-              <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
-              <div class="form-group col-md-6">
-                <label class="text-muted" for="project_id">Project Id:</label>
-                <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
-              </div>
-              <div class="form-group col-md-6">
-                <label class="text-muted" for="title">Title:</label>
-                <input type="text" class="form-control" id="title" formControlName="title">
-              </div>
-              <!-- <hr class="hr mb-2"> -->
-      
-              <div class="form-group col-md-12">
-                  <label class="text-muted" for="description">Description:</label>
-                  <textarea type="text" class="form-control" id="description" rows="2" formControlName="description"></textarea>
-              </div>
-              <div class="form-group col-md-6">
-                  <label class="text-muted" for="start_date">Project Start Date: &nbsp;{{updateForm.controls['start_date'].value | date}}</label>
-                  <input type="date" class="form-control" id="start_date" formControlName="start_date">
-              </div>
-              <div class="form-group col-md-6">
-                <label class="text-muted" for="end_date">Project End Date: &nbsp;{{updateForm.controls['end_date'].value | date}}</label>
-                <input type="date" class="form-control" id="end_date" formControlName="end_date">
-              </div>
-              <div class="form-group col-md-6">
-                  <label class="text-muted" for="status">Status:</label>
-                  <!-- <input type="text" class="form-control" id="status" formControlName="status"> -->
-                  <select class="form-control" formControlName="status" (change)="onChangeStatus()">
-                    <option class="form-control" *ngFor="let status of projectStatusOptions" [ngValue]="status['id']">
-                      {{ status['title'] }}
-                    </option>
-                  </select>
-              </div>
-              <div class="form-group col-md-6">
-                <label class="text-muted" for="project_lead">Project Lead:</label>
-                <input type="text" class="form-control" [value]="projectLead" disabled>
-              </div>
-              <!-- <div class="form-group col-md-11">
-                <label class="text-muted" for="devs">Project Developers:</label>
-                <input list="dev-list" type="text" id="devs" class="form-control">
-                <datalist id="dev-list">
-                  <option class="form-control" *ngFor="let developer of allDevList">{{developer.first_name}} {{developer.last_name}} [{{developer.email || 'email not available'}} - {{developer.mobile_number || 'contact not available'}}] </option>
-                </datalist>
-                <div class="d-flex flex-wrap">
-                  <button type="button" class="btn btn-outline-primary btn-sm my-2 me-1"
-                    *ngFor="let dev of projectDetails.project_users; index as idx" [ngClass]="(dev.role_title === 'lead') ? 'btn-primary text-white' : 'btn-outline-primary'" >
-                    {{dev.first_name || 'No Title Provided'}} {{dev.last_name}}
-                  </button>
-                </div>
-              </div>
-              <div class="form-group col-md-1">
-                <button class="btn btn-sm btn-dark align my-4" (click)="addDeveloper()">Add</button>
-              </div> -->
-              
-              <!-- Add more form controls as needed -->
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="updateProject()">Update</button>
-          </div>
-        </ng-template>
       </div>
 
       <div *ngIf="activatedTabIndex ==1">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-between align-items-center">
           <h3 class="my-4">PROJECT DEVELOPERS</h3>
+          <button class="btn btn-sm btn-primary" style="height: fit-content;" (click)="openAddProjectUserModal(addProjectUserModal)">Add User</button>
         </div>
 
         <div class="container">
@@ -139,13 +67,7 @@
             <tbody *ngIf="!loader">
               <tr *ngFor="let user of projectDetails['project_users']; let indexOfelement = index">
                 <th scope="row">{{ indexOfelement + 1 }}</th>
-                <td
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  [title]="[user.email]"
-                >
-                  {{ user.first_name }} {{user.last_name}}
-                </td>
+                <td [title]="[user.email]">{{ user.first_name }} {{user.last_name}}</td>
                 <td>{{ user.user_profile_title }}</td>
                 <td >{{ user.role_title | titlecase}}</td>
                 <td >
@@ -177,30 +99,6 @@
           </div>
         </div>
 
-        <ng-template #updateProjectUserModal let-modal>
-          <div class="modal-header mb-3">
-            <h1 class="modal-title my-1">Update User Activity</h1>
-            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
-          </div>
-          <div class="modal-body">
-            <form [formGroup]="updateProjectUserForm" class="row g-3">
-              <!-- Add your form controls here -->
-              <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
-              <div class="form-group col-md-6">
-                <label class="text-muted" for="project_id">Project Id:</label>
-                <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="updateProjectUser()">Update</button>
-          </div>
-        </ng-template>
-      
       </div>
 
       <div *ngIf="activatedTabIndex ==2">
@@ -331,3 +229,182 @@
 
 
 
+
+
+<ng-template #updateProjectDetailsModal let-modal>
+  <div class="modal-header mb-3">
+    <h1 class="modal-title my-1">Update Project Details</h1>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateForm" class="row g-3">
+      <!-- Add your form controls here -->
+      <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="project_id">Project Id:</label>
+        <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
+      </div>
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="title">Title:</label>
+        <input type="text" class="form-control" id="title" formControlName="title">
+      </div>
+      <!-- <hr class="hr mb-2"> -->
+
+      <div class="form-group col-md-12">
+          <label class="text-muted" for="description">Description:</label>
+          <textarea type="text" class="form-control" id="description" rows="2" formControlName="description"></textarea>
+      </div>
+      <div class="form-group col-md-6">
+          <label class="text-muted" for="start_date">Project Start Date: &nbsp;{{updateForm.controls['start_date'].value | date}}</label>
+          <input type="date" class="form-control" id="start_date" formControlName="start_date">
+      </div>
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="end_date">Project End Date: &nbsp;{{updateForm.controls['end_date'].value | date}}</label>
+        <input type="date" class="form-control" id="end_date" formControlName="end_date">
+      </div>
+      <div class="form-group col-md-6">
+          <label class="text-muted" for="status">Status:</label>
+          <!-- <input type="text" class="form-control" id="status" formControlName="status"> -->
+          <select class="form-control" formControlName="status" (change)="onChangeStatus()">
+            <option class="form-control" *ngFor="let status of projectStatusOptions" [ngValue]="status['id']">
+              {{ status['title'] }}
+            </option>
+          </select>
+      </div>
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="project_lead">Project Lead:</label>
+        <input type="text" class="form-control" [value]="projectLead" disabled>
+      </div>
+      <!-- <div class="form-group col-md-11">
+        <label class="text-muted" for="devs">Project Developers:</label>
+        <input list="dev-list" type="text" id="devs" class="form-control">
+        <datalist id="dev-list">
+          <option class="form-control" *ngFor="let developer of allDevList">{{developer.first_name}} {{developer.last_name}} [{{developer.email || 'email not available'}} - {{developer.mobile_number || 'contact not available'}}] </option>
+        </datalist>
+        <div class="d-flex flex-wrap">
+          <button type="button" class="btn btn-outline-primary btn-sm my-2 me-1"
+            *ngFor="let dev of projectDetails.project_users; index as idx" [ngClass]="(dev.role_title === 'lead') ? 'btn-primary text-white' : 'btn-outline-primary'" >
+            {{dev.first_name || 'No Title Provided'}} {{dev.last_name}}
+          </button>
+        </div>
+      </div>
+      <div class="form-group col-md-1">
+        <button class="btn btn-sm btn-dark align my-4" (click)="addDeveloper()">Add</button>
+      </div> -->
+      
+      <!-- Add more form controls as needed -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="updateProject()">Update</button>
+  </div>
+</ng-template>
+
+<ng-template #updateProjectUserModal let-modal>
+  <div class="modal-header mb-3">
+    <h1 class="modal-title my-1">Update User Activity</h1>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <!-- <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" ></button> -->
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="updateProjectUserForm" class="row g-3">
+      <!-- Add your form controls here -->
+      <!-- <h3 class="text-muted text-sm mb-0">Project Details</h3> -->
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="project_id">Project Id:</label>
+        <input type="text" class="form-control disabled" id="project_id" formControlName="id" required>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="updateProjectUser()">Update</button>
+  </div>
+</ng-template>
+
+<ng-template #addProjectUserModal let-modal>
+  <div class="modal-header mb-3">
+    <h1 class="modal-title my-1">Add Developers</h1>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="addProjectUserForm" class="row g-3">
+
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="devs">select user:</label>
+        <select type="text" (change)="nameFunction()" formControlName="user_id" id="user_id" class="form-control">
+          <option selected [ngValue]='null'>---Select User---</option>
+          <option [ngValue]="dev['id']" *ngFor="let dev of allDevList">{{dev.email}} -- {{dev.first_name}} {{dev.last_name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label class="text-muted" for="devs">user name:</label>
+        <input type="text" formControlName="user_name" id="user_name" class="form-control">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label class="text-muted text-sm">select Role:</label>
+        <select placeholder="" type="text" formControlName="role_id" id="role_id" class="form-control" required>
+          <option selected [ngValue]='null'>---Select User Role---</option>
+          <option [ngValue]="2" >DEVELOPER</option>
+          <option disabled>LEAD</option>
+        </select>
+      </div>
+      
+      <!-- <div class="form-group col-md-6">
+        <label class="text-muted text-sm">select role:</label>
+        <input type="text" class="form-control" formControlName="role_id">
+      </div> -->
+
+      <div class="form-group col-md-6">
+        <label class="text-muted text-sm">select Profile:</label>
+        <select placeholder="" type="text" formControlName="profile_id" id="project_id" class="form-control" required>
+          <option selected [ngValue]='null'>---Select User Role---</option>
+          <option [ngValue]="profile['id']" *ngFor="let profile of allProfiles">{{profile.title | uppercase}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-11">
+        <label class="text-muted text-sm">select Join Date:</label>
+        <input type="date" class="form-control" formControlName="join_date">
+      </div>
+
+      <div class="form-group col-md-1">
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-sm btn-dark justify-content-end my-4" (click)="addDeveloper()">Add</button>
+        </div>
+      </div>
+
+      <div class="form-group col-md-11">
+        <label class="text-muted" >project developers:</label>
+        <div class="d-flex flex-wrap">
+          <button type="button" class="btn btn-outline-primary btn-sm mb-2 me-1"
+            *ngFor="let dev of selectedDevNameList; index as idx" [ngClass]="(dev.role_title === 'lead') ? 'btn-primary text-white' : 'btn-outline-primary'" >
+            {{dev}}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group col-md-1">
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-sm btn-danger justify-content-end my-4" (click)="removeDeveloper()">Remove</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="modal.dismiss('Cancel click')">Cancel</button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="updateProjectUser()">Submit</button>
+  </div>
+</ng-template>

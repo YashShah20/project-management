@@ -39,4 +39,8 @@ export class ProjectService {
   updateProjectStatus(id: any, status: any): Observable<any> {
     return this.http.put(`${BASE_URL}/project/${id}/update-status`, status);
   }
+
+  addProjectUsers(id: any, users: any) {
+    return this.http.post(`${BASE_URL}/project/${id}/add-users`, users);
+  }
 }
