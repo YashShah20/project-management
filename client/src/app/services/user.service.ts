@@ -77,8 +77,11 @@ export class UserService {
     return this.http.post(`${BASE_URL}/user/forgot-password`, user);
   }
 
-  resetPassword(credentials: any) {
-    return this.http.post(`${BASE_URL}/user/reset-password`, credentials);
+  resetPassword(token: any, credentials: any) {
+    return this.http.post(
+      `${BASE_URL}/user/reset-password?token=${token}`,
+      credentials
+    );
   }
 
   logOut() {
