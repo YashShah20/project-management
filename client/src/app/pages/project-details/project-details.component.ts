@@ -36,7 +36,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   projectStatusOptions: any[] = PROJECT_STATUS;
 
-  tabs: string [] = ['Details','Developers', 'Tasks', 'Issues'];
+  tabs: string[] = ['Details', 'Developers', 'Tasks', 'Issues'];
   activatedTabIndex: number = 0;
 
   constructor(
@@ -51,8 +51,6 @@ export class ProjectDetailsComponent implements OnInit {
     private userProfileService: UserProfilesService,
     private handler: ErrorHandlerService
   ) {}
-
-  
 
   dismissModal() {
     this.selectedDevList = [];
@@ -137,6 +135,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   updateProjectUser() {
+<<<<<<< HEAD
     console.log("devList", this.selectedDevList);
     if(!this.selectedDevList.length) {
       this.toast.warning('No users selected', 'Oops!!')
@@ -160,16 +159,36 @@ export class ProjectDetailsComponent implements OnInit {
       }
     })
     
+=======
+    console.log('devList', this.selectedDevList);
+    let val = { users: this.selectedDevList };
+
+    this.projectService.addProjectUsers(this.id, val).subscribe({
+      next: (res) => {
+        console.log('after', res);
+        this.selectedDevList = [];
+        this.selectedDevNameList = [];
+      },
+      error: (error) => {
+        console.log('after', error);
+        this.handler.handle(error);
+      },
+    });
+>>>>>>> origin/main
   }
 
-  openProjectTaskUpdateModal(modal: any, index: any, form: any = this.taskList) {
+  openProjectTaskUpdateModal(
+    modal: any,
+    index: any,
+    form: any = this.taskList
+  ) {
     this.modalService.open(modal, { size: 'lg' });
     this.initializeProjectUpdateModal(form[index]);
   }
 
   openAddProjectUserModal(modal: any, form: any = null) {
-    this.modalService.open(modal, {size: "lg"})
-    this.initializeAddProjectModal()
+    this.modalService.open(modal, { size: 'lg' });
+    this.initializeAddProjectModal();
   }
 
   initializeAddProjectModal() {
@@ -178,8 +197,8 @@ export class ProjectDetailsComponent implements OnInit {
       role_id: [null, Validators.required],
       profile_id: [null, Validators.required],
       join_date: [null, Validators.required],
-      user_name: [{value: null, disabled: true}]
-    })
+      user_name: [{ value: null, disabled: true }],
+    });
   }
 
   nameFunction() {
@@ -187,28 +206,46 @@ export class ProjectDetailsComponent implements OnInit {
     // console.log("this.id", this.addProjectUserForm.get('user_id')?.value);
     // this.selectedDevNameList.push(this.allDevList.filter((user) => user.id == this.addProjectUserForm.get('user_id')?.value).map((user) => user.first_name + " " + user.last_name))
     // this.addProjectUserForm.setValue({user_name: this.allDevList.filter((user) => user.id == this.addProjectUserForm.get('user_id')?.value).map((user) => user.first_name + " " + user.last_name)})
-    
-    this.addProjectUserForm.controls['user_name'].setValue(this.allDevList.filter((user) => user.id == this.addProjectUserForm.get('user_id')?.value).map((user) => user.first_name + " " + user.last_name))
-    
-    
+
+    const user = this.allDevList.find(
+      (user) => user.id == this.addProjectUserForm.get('user_id')?.value
+    );
+
+    this.addProjectUserForm.controls['user_name'].setValue(
+      `${user.first_name} ${user.last_name}`
+    );
   }
 
+<<<<<<< HEAD
   addDeveloper() { 
     if(this.addProjectUserForm.valid && this.addProjectUserForm.dirty) {
       this.selectedDevList.push(this.addProjectUserForm.value)
       this.selectedDevNameList.push(this.allDevList.filter((user) => user.id == this.addProjectUserForm.get('user_id')?.value).map((user) => user.first_name + " " + user.last_name))
       // this.toast.info('User added')
       this.addProjectUserForm.reset()
+=======
+  addDeveloper() {
+    if (this.addProjectUserForm.valid && this.addProjectUserForm.dirty) {
+      this.selectedDevList.push(this.addProjectUserForm.value);
+      this.selectedDevNameList.push(
+        this.allDevList
+          .filter(
+            (user) => user.id == this.addProjectUserForm.get('user_id')?.value
+          )
+          .map((user) => user.first_name + ' ' + user.last_name)
+      );
+      this.toast.info('User added');
+      this.addProjectUserForm.reset();
+>>>>>>> origin/main
     } else {
-      this.toast.warning("Please fill every field", 'Invalid Form!!')
+      this.toast.warning('Please fill every field', 'Invalid Form!!');
     }
-
   }
 
   removeDeveloper() {
     this.selectedDevList = [];
     this.selectedDevNameList = [];
-    this.toast.success('Developer Removed', 'Success')
+    this.toast.success('Developer Removed', 'Success');
   }
 
   ngOnInit(): void {
@@ -259,16 +296,15 @@ export class ProjectDetailsComponent implements OnInit {
 
     this.userService.fetchAllDevList().subscribe((devList) => {
       this.allDevList = <any[]>devList;
-      console.log("Users: ", this.allDevList);
-      
-    })
+      console.log('Users: ', this.allDevList);
+    });
 
     this.userRoleService.getRoles().subscribe((res) => {
-      this.allRoles = res
-    })
+      this.allRoles = res;
+    });
 
-    this.userProfileService.getUserProfiles().subscribe(res => {
-      this.allProfiles = res
+    this.userProfileService.getUserProfiles().subscribe((res) => {
+      this.allProfiles = res;
     });
   }
 
@@ -276,5 +312,4 @@ export class ProjectDetailsComponent implements OnInit {
     // debugger;
     this.activatedTabIndex = tabIndex;
   }
-
 }
