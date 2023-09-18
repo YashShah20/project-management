@@ -138,16 +138,25 @@ export class ProjectDetailsComponent implements OnInit {
 
   updateProjectUser() {
     console.log("devList", this.selectedDevList);
+    if(!this.selectedDevList.length) {
+      this.toast.warning('No users selected', 'Oops!!')
+      this.modalService.dismissAll()
+
+      return
+    }
     let val = {users: this.selectedDevList}    
     
     this.projectService.addProjectUsers(this.id, val).subscribe({
       next: (res) => {
         console.log("after", res);
+        this.toast.success(`${this.selectedDevNameList} added`, 'Success')
         this.selectedDevList = [];
         this.selectedDevNameList = [];
       },
       error: (err) => {
         console.log("after", err);
+        this.toast.error(err.error, 'Error!')
+        this.handler.handle(err)
       }
     })
     
@@ -188,7 +197,7 @@ export class ProjectDetailsComponent implements OnInit {
     if(this.addProjectUserForm.valid && this.addProjectUserForm.dirty) {
       this.selectedDevList.push(this.addProjectUserForm.value)
       this.selectedDevNameList.push(this.allDevList.filter((user) => user.id == this.addProjectUserForm.get('user_id')?.value).map((user) => user.first_name + " " + user.last_name))
-      this.toast.info('User added')
+      // this.toast.info('User added')
       this.addProjectUserForm.reset()
     } else {
       this.toast.warning("Please fill every field", 'Invalid Form!!')

@@ -23,8 +23,6 @@ export class ProjectListComponent implements OnInit, AfterViewInit {
     private handler: ErrorHandlerService
   ) {}
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
   ngAfterViewInit(): void {
     // this.dataSource.paginator = this.paginator;
   }

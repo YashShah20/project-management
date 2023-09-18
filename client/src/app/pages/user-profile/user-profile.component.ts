@@ -8,16 +8,26 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserProfileComponent implements OnInit{
 
-  userProfile!: any;
+  user!: any;
+  loader: boolean = true;
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.getProfile().subscribe((profile) => {
-      this.userProfile = profile;
+    this.userService.getProfile().subscribe({
+      next: (profile) => {
+      this.user = profile;
+
+      setTimeout(() => {
+        this.loader = false;
+      }, 500);
       console.log(profile);
       
-    })
+    },
+    error: (err) => {
+      console.log('Error Occured: ', err);
+      this.loader = false
+    }})
   }
 
 }
