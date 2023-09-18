@@ -26,7 +26,23 @@ export class AllProjectsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.projectService.getProjects(1, 10).subscribe({
+    // this.projectService.getProjects(1, 10).subscribe({
+    //   next: (projects) => {
+    //     this.projectList = projects;
+    //     this.loader = false;
+    //   },
+    //   error: (error) => {
+    //     // console.log('Error in Project List');
+    //     // console.log(error?.error);
+    //     setTimeout(() => {
+    //       this.loader = false;
+    //     }, 1500);
+    //     this.handler.handle(error);
+    //   },
+    //   // this.dataSource = new MatTableDataSource<any>(this.projectList);
+    // });
+
+    this.projectService.getProjectTitles().subscribe({
       next: (projects) => {
         this.projectList = projects;
         this.loader = false;

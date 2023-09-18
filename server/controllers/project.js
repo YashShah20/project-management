@@ -122,6 +122,9 @@ const updateProject = async (req, res, next) => {
     const { project_id } = req.params;
     const { id } = req.user;
 
+    console.log(
+      `(select role_id from project_users where project_id=${project_id} and user_id=${id})=${LEAD_USER_ROLE_ID}`
+    );
     const [project] = (
       await pool.query(
         `UPDATE projects

@@ -66,3 +66,36 @@
       </div>
     </div>
   </section> -->
+
+
+  <div *ngIf="loader" class="spinner-section">
+    <div class="spinner-border text-secondary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  
+  <div *ngIf="!loader" class="container p-2">
+    
+    <div class="h4 ms-2">Basic Details</div>
+    <div class="d-flex justify-content-start align-items-around">
+      <div>
+        <img src="https://randomuser.me/api/portraits/men/{{ user?.id }}.jpg" />
+      </div>
+      <ul class="list-group list-group-light ms-3">
+        <li class="list-group-item border-0">
+          <strong>First Name: </strong> {{ user?.first_name }}
+        </li>
+        <li class="list-group-item border-0">
+          <strong>Last Name: </strong> {{ user?.last_name }}
+        </li>
+        <li class="list-group-item border-0">
+          <strong>Email: </strong> {{ user?.email }}
+        </li>
+        <li class="list-group-item border-0">
+          <strong>Mobile Number: </strong> {{ user?.mobile_number }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  

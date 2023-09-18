@@ -263,7 +263,7 @@
       </div>
       <div class="form-group col-md-6">
         <label class="text-muted" for="end_date">Project End Date: &nbsp;{{updateForm.controls['end_date'].value | date}}</label>
-        <input type="date" class="form-control" id="end_date" formControlName="end_date">
+        <input type="date" class="form-control" id="end_date" formControlName="end_date" [value]="updateForm.controls['end_date'].value | date">
       </div>
       <div class="form-group col-md-6">
           <label class="text-muted" for="status">Status:</label>
